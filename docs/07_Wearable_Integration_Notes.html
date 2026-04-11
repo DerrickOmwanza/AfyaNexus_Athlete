@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AfyaNexus – Wearable Device Integration Notes</title>
+  <style>
+    body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 12pt; color: #111827; background: #ffffff; margin: 0; padding: 0; }
+    .page { width: 210mm; min-height: 297mm; margin: 0 auto; padding: 25mm 25mm 20mm 30mm; box-sizing: border-box; }
+    .cover { text-align: center; padding-top: 55mm; padding-bottom: 35mm; border-bottom: 3px solid #1E3A8A; margin-bottom: 20mm; }
+    .cover .system-name { font-size: 36pt; font-weight: 700; color: #1E3A8A; letter-spacing: 2px; margin-bottom: 6px; }
+    .cover .doc-title { font-size: 18pt; font-weight: 700; color: #10B981; text-decoration: underline; margin-bottom: 20px; }
+    .cover .tagline { font-size: 11pt; color: #6B7280; font-style: italic; margin-bottom: 36px; }
+    .cover .meta-table { display: inline-block; text-align: left; border: 1px solid #D1D5DB; border-radius: 6px; padding: 14px 28px; background: #F3F4F6; }
+    .cover .meta-table p { margin: 4px 0; font-size: 10.5pt; color: #374151; }
+    .cover .meta-table span { font-weight: 700; color: #1E3A8A; }
+    h1 { font-size: 16pt; font-weight: 700; color: #1E3A8A; text-decoration: underline; border-bottom: 2px solid #1E3A8A; padding-bottom: 4px; margin-top: 28px; margin-bottom: 10px; }
+    h2 { font-size: 13pt; font-weight: 700; color: #10B981; text-decoration: underline; margin-top: 18px; margin-bottom: 8px; }
+    h3 { font-size: 11.5pt; font-weight: 700; color: #F97316; margin-top: 12px; margin-bottom: 6px; }
+    p { line-height: 1.7; margin: 6px 0 10px 0; text-align: justify; }
+    ul, ol { margin: 6px 0 12px 24px; line-height: 1.8; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 10.5pt; }
+    th { background: #1E3A8A; color: #ffffff; padding: 8px 10px; text-align: left; font-weight: 700; }
+    td { padding: 7px 10px; border: 1px solid #D1D5DB; vertical-align: top; }
+    tr:nth-child(even) td { background: #F3F4F6; }
+    .code-block { background: #1E293B; color: #E2E8F0; border-radius: 6px; padding: 14px 18px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: 9.5pt; line-height: 1.7; white-space: pre; }
+    .flow-step { display: flex; align-items: flex-start; margin-bottom: 12px; }
+    .step-num { background: #1E3A8A; color: #ffffff; border-radius: 50%; width: 26px; height: 26px; min-width: 26px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10pt; margin-right: 12px; margin-top: 2px; }
+    .step-content .step-title { font-weight: 700; color: #1E3A8A; font-size: 11pt; }
+    .step-content p { margin: 2px 0; font-size: 10.5pt; color: #374151; }
+    .warning-box { background: #FFF7ED; border-left: 4px solid #F97316; padding: 10px 16px; margin: 14px 0; border-radius: 0 6px 6px 0; }
+    .warning-box p { margin: 0; color: #9A3412; font-size: 10.5pt; }
+    .info-box { background: #EFF6FF; border-left: 4px solid #1E3A8A; padding: 10px 16px; margin: 14px 0; border-radius: 0 6px 6px 0; }
+    .info-box p { margin: 0; color: #1E3A8A; font-size: 10.5pt; }
+    .section-divider { border: none; border-top: 1px solid #E5E7EB; margin: 22px 0; }
+    .footer { text-align: center; font-size: 9pt; color: #9CA3AF; border-top: 1px solid #E5E7EB; padding-top: 10px; margin-top: 40px; }
+    @media print { .page { margin: 0; padding: 20mm 20mm 15mm 25mm; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="system-name">AfyaNexus</div>
+    <div class="doc-title">Wearable Device Integration Notes</div>
+    <div class="tagline">Hybrid Wearable and Health-App Integration with AfyaNexus Platform</div>
+    <div class="meta-table">
+      <p><span>Document Type:</span> Integration Notes</p>
+      <p><span>Version:</span> 1.0</p>
+      <p><span>Project Name:</span> AfyaNexus</p>
+      <p><span>Device:</span> T70 + Future Modular Adapters</p>
+      <p><span>Status:</span> Final Draft</p>
+    </div>
+  </div>
+
+  <!-- SECTION 1: DEVICE SPECIFICATIONS -->
+  <h1>1. Device Specifications</h1>
+  <p>
+    The T70 smartwatch is the baseline wearable currently represented in AfyaNexus. The integration layer is being evolved into a modular architecture so that other devices or health ecosystems can also provide athlete data automatically. This reduces reliance on manual athlete input and improves the accuracy of the injury risk workflow.
+  </p>
+  <table>
+    <tr><th>Field</th><th>Value</th></tr>
+    <tr><td>Product Name</td><td>T70 Smartwatch</td></tr>
+    <tr><td>Firmware Version</td><td>V00621</td></tr>
+    <tr><td>Bluetooth Address</td><td>70:0A:B7:00:86:D0</td></tr>
+    <tr><td>FCC ID</td><td>2BEJG-T70</td></tr>
+    <tr><td>IC Number</td><td>31964-T70</td></tr>
+    <tr><td>HVIN</td><td>T70</td></tr>
+    <tr><td>Connectivity</td><td>Bluetooth Low Energy (BLE)</td></tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 2: DATA CAPTURED -->
+  <h1>2. Data Captured by T70</h1>
+  <p>The wearable and health-integration layer captures the following data points that are directly relevant to AfyaNexus:</p>
+  <table>
+    <tr><th>Data Field</th><th>Description</th><th>AfyaNexus Usage</th></tr>
+    <tr>
+      <td>Heart Rate (Average)</td>
+      <td>Average beats per minute during activity and rest</td>
+      <td>Stored in WearableData table; used as ML input feature</td>
+    </tr>
+    <tr>
+      <td>Sleep Duration</td>
+      <td>Total hours of sleep detected by the device</td>
+      <td>Cross-referenced with manual sleep input in RecoveryLogs</td>
+    </tr>
+    <tr>
+      <td>Sleep Quality</td>
+      <td>Deep sleep vs light sleep breakdown (where available)</td>
+      <td>Supplementary recovery metric for ML model</td>
+    </tr>
+    <tr>
+      <td>Step Count</td>
+      <td>Total steps taken during the day</td>
+      <td>Activity level indicator stored in WearableData</td>
+    </tr>
+    <tr>
+      <td>Activity Logs</td>
+      <td>Detected activity sessions (walking, running, etc.)</td>
+      <td>Cross-referenced with manual training logs</td>
+    </tr>
+    <tr>
+      <td>Nutrition Intake Logs</td>
+      <td>Calories, carbohydrates, proteins, fats, hydration and meal notes imported from connected nutrition apps where available</td>
+      <td>Stored in NutritionLogs and reviewed by the nutritionist for performance support</td>
+    </tr>
+    <tr>
+      <td>Clinical Biomarkers (Future)</td>
+      <td>Lab-derived nutrient or mineral measurements such as calcium, iron, or vitamin D</td>
+      <td>Not collected by standard consumer wearables; future integration path via clinician upload or EMR/lab systems</td>
+    </tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 3: INTEGRATION FLOW -->
+  <h1>3. Integration Flow</h1>
+  <p>AfyaNexus uses a hybrid sync process. Training and recovery data can come from Bluetooth wearables or platform APIs, while nutrition intake can come from athlete entry or connected health and diet apps.</p>
+
+  <div class="flow-step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <div class="step-title">Athlete Connects a Data Source</div>
+      <p>The athlete pairs a wearable device or authorizes a supported health platform. For the first Android demonstration flow, AfyaNexus uses Google Health Connect as the synchronized source.</p>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <div class="step-title">Athlete Triggers Sync</div>
+      <p>From the athlete dashboard, the athlete triggers a sync. The system connects through Bluetooth, mobile health bridges, or vendor APIs depending on the source. On Android, the preferred demonstration path is Health Connect.</p>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <div class="step-title">Data Retrieval and Parsing</div>
+      <p>The system reads the available training, recovery, and nutrition-intake data. Raw source data is normalized into the AfyaNexus format.</p>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="step-num">4</div>
+    <div class="step-content">
+      <div class="step-title">API Submission and Validation</div>
+      <p>Parsed data is submitted to the sync endpoints with the athlete's JWT token for authentication. The backend validates the data, stores it, and flags suspicious or ambiguous values. Android Health Connect imports can combine recovery, wearable, training, and nutrition data into one sync request.</p>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="step-num">5</div>
+    <div class="step-content">
+      <div class="step-title">Dashboard Update</div>
+      <p>The athlete dashboard refreshes to display newly synced values alongside manual inputs. The injury prediction service can then recalculate the athlete's current risk score using the freshest dataset.</p>
+    </div>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 4: API ENDPOINT DETAIL -->
+  <h1>4. Wearable Sync API Endpoint</h1>
+  <h2>4.1 Endpoint</h2>
+  <div class="code-block">POST /api/wearable/sync
+Authorization: Bearer &lt;JWT_TOKEN&gt;
+Content-Type: application/json</div>
+
+  <h2>4.2 Request Body</h2>
+  <div class="code-block">{
+  "device_id": "70:0A:B7:00:86:D0",
+  "date": "2025-01-15",
+  "heart_rate_avg": 72,
+  "sleep_duration": 7.5,
+  "steps": 8420,
+  "activity_logs": [
+    { "type": "running", "duration_min": 45 },
+    { "type": "walking", "duration_min": 20 }
+  ]
+}</div>
+
+  <h2>4.3 Success Response</h2>
+  <div class="code-block">{
+  "status": "success",
+  "message": "Wearable data synced successfully",
+  "wearable_data_id": 142,
+  "synced_at": "2025-01-15T07:32:00Z"
+}</div>
+
+  <h2>4.4 Error Response</h2>
+  <div class="code-block">{
+  "status": "error",
+  "message": "Device not registered to this athlete account"
+}</div>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 5: DATA VALIDATION -->
+  <h1>5. Data Validation Rules</h1>
+  <table>
+    <tr><th>Field</th><th>Validation Rule</th></tr>
+    <tr><td>device_id</td><td>Must match the Bluetooth address registered in the athlete's profile</td></tr>
+    <tr><td>heart_rate_avg</td><td>Must be between 30 and 220 bpm</td></tr>
+    <tr><td>sleep_duration</td><td>Must be between 0 and 24 hours</td></tr>
+    <tr><td>steps</td><td>Must be a non-negative integer</td></tr>
+    <tr><td>date</td><td>Must not be a future date; must be within the last 7 days</td></tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 6: LIMITATIONS -->
+  <h1>6. Limitations and Considerations</h1>
+
+  <div class="warning-box">
+    <p><strong>⚠️ Device-Specific Integration:</strong> T70 is the current baseline, but Garmin, Apple Health, Fitbit, WHOOP, and Android health ecosystems will require separate adapters, credentials, and approval flows.</p>
+  </div>
+
+  <div class="warning-box">
+    <p><strong>⚠️ Bluetooth Range:</strong> Bluetooth Low Energy (BLE) has a typical range of 10 meters. Athletes must be within range of their paired device during sync.</p>
+  </div>
+
+  <div class="warning-box">
+    <p><strong>⚠️ Data Accuracy:</strong> Wearable and app-derived data are estimates. AfyaNexus should validate, cross-check, and flag conflicts between manual and synced entries before using them in prediction.</p>
+  </div>
+
+  <div class="info-box">
+    <p><strong>ℹ️ Manual Override:</strong> Athletes can still enter data manually. Manual data should remain available as a fallback and should be compared with synced data for ambiguity detection.</p>
+  </div>
+
+  <div class="info-box">
+    <p><strong>ℹ️ Android Bridge:</strong> AfyaNexus now includes an Android-first bridge concept in which a lightweight native app can request Health Connect permissions, read records locally on the phone, and send normalized payloads to the AfyaNexus API.</p>
+  </div>
+
+  <div class="info-box">
+    <p><strong>ℹ️ Future Expansion:</strong> Standard consumer wearables do not directly measure body nutrient levels such as calcium or protein status. Those metrics should be handled as a future clinical integration through laboratory systems, clinician upload, or EMR interoperability.</p>
+  </div>
+
+  <div class="footer">
+    AfyaNexus &mdash; Wearable Device Integration Notes &mdash; Version 1.0 &mdash; Confidential
+  </div>
+
+</div>
+</body>
+</html>

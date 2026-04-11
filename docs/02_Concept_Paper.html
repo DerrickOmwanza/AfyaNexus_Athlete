@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AfyaNexus – Concept Paper</title>
+  <style>
+    body {
+      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+      font-size: 12pt;
+      color: #111827;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 25mm 25mm 20mm 30mm;
+      box-sizing: border-box;
+    }
+    .cover {
+      text-align: center;
+      padding-top: 55mm;
+      padding-bottom: 35mm;
+      border-bottom: 3px solid #10B981;
+      margin-bottom: 20mm;
+    }
+    .cover .system-name {
+      font-size: 36pt;
+      font-weight: 700;
+      color: #1E3A8A;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+    .cover .doc-title {
+      font-size: 18pt;
+      font-weight: 700;
+      color: #10B981;
+      text-decoration: underline;
+      margin-bottom: 20px;
+    }
+    .cover .tagline {
+      font-size: 11pt;
+      color: #6B7280;
+      font-style: italic;
+      margin-bottom: 36px;
+    }
+    .cover .meta-table {
+      display: inline-block;
+      text-align: left;
+      border: 1px solid #D1D5DB;
+      border-radius: 6px;
+      padding: 14px 28px;
+      background: #F3F4F6;
+    }
+    .cover .meta-table p { margin: 4px 0; font-size: 10.5pt; color: #374151; }
+    .cover .meta-table span { font-weight: 700; color: #1E3A8A; }
+    h1 {
+      font-size: 16pt;
+      font-weight: 700;
+      color: #1E3A8A;
+      text-decoration: underline;
+      border-bottom: 2px solid #1E3A8A;
+      padding-bottom: 4px;
+      margin-top: 28px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 13pt;
+      font-weight: 700;
+      color: #10B981;
+      text-decoration: underline;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+    h3 {
+      font-size: 11.5pt;
+      font-weight: 700;
+      color: #F97316;
+      margin-top: 12px;
+      margin-bottom: 6px;
+    }
+    p { line-height: 1.7; margin: 6px 0 10px 0; text-align: justify; }
+    ul, ol { margin: 6px 0 12px 24px; line-height: 1.8; }
+    li { margin-bottom: 4px; }
+    .highlight-box {
+      background: #ECFDF5;
+      border-left: 4px solid #10B981;
+      padding: 10px 16px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .highlight-box p { margin: 0; font-style: italic; color: #065F46; font-weight: 600; }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .feature-card {
+      border: 1px solid #D1D5DB;
+      border-radius: 8px;
+      padding: 12px 14px;
+      background: #F9FAFB;
+    }
+    .feature-card .card-title {
+      font-weight: 700;
+      color: #1E3A8A;
+      font-size: 11pt;
+      margin-bottom: 6px;
+    }
+    .feature-card p { margin: 0; font-size: 10.5pt; color: #374151; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 10.5pt;
+    }
+    th {
+      background: #10B981;
+      color: #ffffff;
+      padding: 8px 10px;
+      text-align: left;
+      font-weight: 700;
+    }
+    td {
+      padding: 7px 10px;
+      border: 1px solid #D1D5DB;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #F3F4F6; }
+    .section-divider { border: none; border-top: 1px solid #E5E7EB; margin: 22px 0; }
+    .footer {
+      text-align: center;
+      font-size: 9pt;
+      color: #9CA3AF;
+      border-top: 1px solid #E5E7EB;
+      padding-top: 10px;
+      margin-top: 40px;
+    }
+    @media print { .page { margin: 0; padding: 20mm 20mm 15mm 25mm; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="system-name">AfyaNexus</div>
+    <div class="doc-title">Concept Paper</div>
+    <div class="tagline">Centralized Athlete Training and Nutrition Tracking System</div>
+    <div class="meta-table">
+      <p><span>Document Type:</span> Concept Paper</p>
+      <p><span>Version:</span> 1.0</p>
+      <p><span>Project Name:</span> AfyaNexus</p>
+      <p><span>Category:</span> Capstone Project</p>
+      <p><span>Status:</span> Final Draft</p>
+    </div>
+  </div>
+
+  <!-- SECTION 1: PROBLEM -->
+  <h1>1. Problem</h1>
+  <div class="highlight-box">
+    <p>"Decentralized athlete training and nutrition tracking."</p>
+  </div>
+  <p>
+    Athlete data is scattered across manual logs, personal devices, and isolated communication channels between athletes, coaches, and nutritionists. This fragmentation prevents the creation of a unified, reliable dataset that can accurately inform injury risk prediction, performance monitoring, and nutrition guidance. Without a centralized system, athletes often provide inconsistent or incomplete information, while support staff lack integrated access to the data they need to make timely, evidence-based decisions.
+  </p>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 2: PROPOSED SOLUTION -->
+  <h1>2. Proposed Solution</h1>
+  <p>
+    <strong>AfyaNexus</strong> is a centralized digital platform that unifies athlete training, recovery, and nutrition data. The name is derived from the Kiswahili word <em>Afya</em> (health) and the English word <em>Nexus</em> (connection), reflecting the system's purpose of connecting health data across all stakeholders in an athlete's support ecosystem.
+  </p>
+  <p>
+    The platform integrates manual athlete inputs, wearable device data from the T70 smartwatch, and a machine learning model to generate injury risk predictions. Role-based dashboards ensure that each user — athlete, coach, or nutritionist — accesses only the data relevant to their role, maintaining privacy and data integrity.
+  </p>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 3: KEY FEATURES -->
+  <h1>3. Key Features</h1>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="card-title">🧍 Athlete Dashboard</div>
+      <p>Training logs, recovery records (sleep, soreness, mood), wearable sync, and injury risk score display.</p>
+    </div>
+    <div class="feature-card">
+      <div class="card-title">🧑‍🏫 Coach Dashboard</div>
+      <p>Sponsored athlete performance overview, injury risk alerts, training trend analysis, and guidance tools.</p>
+    </div>
+    <div class="feature-card">
+      <div class="card-title">🥗 Nutritionist Dashboard</div>
+      <p>Registered athlete nutrition logs, personalized diet plan creation, and performance-nutrition correlation charts.</p>
+    </div>
+    <div class="feature-card">
+      <div class="card-title">⌚ Wearable Integration</div>
+      <p>Bluetooth sync with T70 smartwatch for automated capture of heart rate, sleep duration, and activity data.</p>
+    </div>
+    <div class="feature-card">
+      <div class="card-title">🤖 ML Injury Prediction</div>
+      <p>Machine learning model processes training and recovery datasets to output an injury risk score and risk level.</p>
+    </div>
+    <div class="feature-card">
+      <div class="card-title">🔐 Role-Based Access Control</div>
+      <p>Secure registration and authentication ensures each user only accesses data they are authorized to view.</p>
+    </div>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 4: TARGET USERS -->
+  <h1>4. Target Users</h1>
+  <table>
+    <tr>
+      <th>User Role</th>
+      <th>Primary Function</th>
+      <th>Data Access</th>
+    </tr>
+    <tr>
+      <td><strong>Athlete</strong></td>
+      <td>Input and view personal performance data</td>
+      <td>Own dashboard only</td>
+    </tr>
+    <tr>
+      <td><strong>Coach</strong></td>
+      <td>Monitor athletes they sponsor and provide training guidance</td>
+      <td>Sponsored athletes' dashboards only</td>
+    </tr>
+    <tr>
+      <td><strong>Nutritionist</strong></td>
+      <td>Track registered athletes and deliver personalized diet plans</td>
+      <td>Registered athletes' dashboards only</td>
+    </tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 5: INNOVATION -->
+  <h1>5. Innovation</h1>
+  <p>AfyaNexus stands out through three core innovations:</p>
+  <ul>
+    <li>
+      <strong>Kiswahili-English Branding:</strong> The name AfyaNexus blends African identity with global technical language, making the system culturally relevant and professionally distinctive.
+    </li>
+    <li>
+      <strong>Wearable Device Integration:</strong> By syncing with the T70 smartwatch via Bluetooth, AfyaNexus reduces reliance on manual data entry, minimizing bias and improving the accuracy of ML predictions.
+    </li>
+    <li>
+      <strong>Machine Learning-Driven Predictions:</strong> The system goes beyond simple data logging by applying ML to generate actionable injury risk scores, enabling proactive rather than reactive athlete management.
+    </li>
+  </ul>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 6: SYSTEM OVERVIEW SUMMARY -->
+  <h1>6. System Overview Summary</h1>
+  <table>
+    <tr>
+      <th>Aspect</th>
+      <th>Detail</th>
+    </tr>
+    <tr>
+      <td><strong>System Name</strong></td>
+      <td>AfyaNexus</td>
+    </tr>
+    <tr>
+      <td><strong>Problem</strong></td>
+      <td>Decentralized athlete training and nutrition tracking</td>
+    </tr>
+    <tr>
+      <td><strong>Solution</strong></td>
+      <td>Centralized platform with ML, wearable integration, and RBAC dashboards</td>
+    </tr>
+    <tr>
+      <td><strong>Users</strong></td>
+      <td>Athletes, Coaches, Nutritionists</td>
+    </tr>
+    <tr>
+      <td><strong>Key Technology</strong></td>
+      <td>Machine Learning, Bluetooth Wearable Sync, RESTful APIs, RBAC</td>
+    </tr>
+    <tr>
+      <td><strong>Wearable Device</strong></td>
+      <td>T70 Smartwatch (FCC ID: 2BEJG-T70)</td>
+    </tr>
+    <tr>
+      <td><strong>Expected Outcome</strong></td>
+      <td>Centralized dashboards, injury risk predictions, improved athlete guidance</td>
+    </tr>
+  </table>
+
+  <div class="footer">
+    AfyaNexus &mdash; Concept Paper &mdash; Version 1.0 &mdash; Confidential
+  </div>
+
+</div>
+</body>
+</html>

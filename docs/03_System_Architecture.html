@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AfyaNexus – System Architecture Document</title>
+  <style>
+    body {
+      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+      font-size: 12pt;
+      color: #111827;
+      background: #ffffff;
+      margin: 0; padding: 0;
+    }
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 25mm 25mm 20mm 30mm;
+      box-sizing: border-box;
+    }
+    .cover {
+      text-align: center;
+      padding-top: 55mm;
+      padding-bottom: 35mm;
+      border-bottom: 3px solid #1E3A8A;
+      margin-bottom: 20mm;
+    }
+    .cover .system-name { font-size: 36pt; font-weight: 700; color: #1E3A8A; letter-spacing: 2px; margin-bottom: 6px; }
+    .cover .doc-title { font-size: 18pt; font-weight: 700; color: #10B981; text-decoration: underline; margin-bottom: 20px; }
+    .cover .tagline { font-size: 11pt; color: #6B7280; font-style: italic; margin-bottom: 36px; }
+    .cover .meta-table { display: inline-block; text-align: left; border: 1px solid #D1D5DB; border-radius: 6px; padding: 14px 28px; background: #F3F4F6; }
+    .cover .meta-table p { margin: 4px 0; font-size: 10.5pt; color: #374151; }
+    .cover .meta-table span { font-weight: 700; color: #1E3A8A; }
+    h1 { font-size: 16pt; font-weight: 700; color: #1E3A8A; text-decoration: underline; border-bottom: 2px solid #1E3A8A; padding-bottom: 4px; margin-top: 28px; margin-bottom: 10px; }
+    h2 { font-size: 13pt; font-weight: 700; color: #10B981; text-decoration: underline; margin-top: 18px; margin-bottom: 8px; }
+    h3 { font-size: 11.5pt; font-weight: 700; color: #F97316; margin-top: 12px; margin-bottom: 6px; }
+    p { line-height: 1.7; margin: 6px 0 10px 0; text-align: justify; }
+    ul, ol { margin: 6px 0 12px 24px; line-height: 1.8; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 10.5pt; }
+    th { background: #1E3A8A; color: #ffffff; padding: 8px 10px; text-align: left; font-weight: 700; }
+    td { padding: 7px 10px; border: 1px solid #D1D5DB; vertical-align: top; }
+    tr:nth-child(even) td { background: #F3F4F6; }
+    .highlight-box { background: #EFF6FF; border-left: 4px solid #1E3A8A; padding: 10px 16px; margin: 14px 0; border-radius: 0 6px 6px 0; }
+    .highlight-box p { margin: 0; font-style: italic; color: #1E3A8A; font-weight: 600; }
+    /* Architecture diagram (text-based) */
+    .arch-diagram {
+      background: #F3F4F6;
+      border: 1px solid #D1D5DB;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 16px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 9.5pt;
+      color: #111827;
+      line-height: 1.9;
+      white-space: pre;
+    }
+    .layer-box {
+      border: 2px solid #1E3A8A;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 10px 0;
+      background: #EFF6FF;
+    }
+    .layer-box .layer-title { font-weight: 700; color: #1E3A8A; font-size: 11pt; margin-bottom: 6px; }
+    .layer-box ul { margin: 0 0 0 18px; }
+    .layer-box li { font-size: 10.5pt; color: #374151; }
+    .green-box { border-color: #10B981; background: #ECFDF5; }
+    .green-box .layer-title { color: #065F46; }
+    .orange-box { border-color: #F97316; background: #FFF7ED; }
+    .orange-box .layer-title { color: #9A3412; }
+    .section-divider { border: none; border-top: 1px solid #E5E7EB; margin: 22px 0; }
+    .footer { text-align: center; font-size: 9pt; color: #9CA3AF; border-top: 1px solid #E5E7EB; padding-top: 10px; margin-top: 40px; }
+    @media print { .page { margin: 0; padding: 20mm 20mm 15mm 25mm; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="system-name">AfyaNexus</div>
+    <div class="doc-title">System Architecture Document</div>
+    <div class="tagline">Centralized Athlete Training and Nutrition Tracking System</div>
+    <div class="meta-table">
+      <p><span>Document Type:</span> System Architecture</p>
+      <p><span>Version:</span> 1.0</p>
+      <p><span>Project Name:</span> AfyaNexus</p>
+      <p><span>Category:</span> Capstone Project</p>
+      <p><span>Status:</span> Final Draft</p>
+    </div>
+  </div>
+
+  <!-- SECTION 1: OVERVIEW -->
+  <h1>1. Architecture Overview</h1>
+  <p>
+    AfyaNexus follows a <strong>layered, hub-and-spoke architecture</strong>. The athlete is the central data source (hub), while coaches and nutritionists are data consumers (spokes). All data flows through a central database and machine learning processing layer before being surfaced on role-specific dashboards. Access to all layers is governed by Role-Based Access Control (RBAC).
+  </p>
+  <div class="highlight-box">
+    <p>Core Model: Athlete (Data Hub) → Central DB + ML Layer → Role-Based Dashboards (Coach / Nutritionist)</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 2: SYSTEM LAYERS -->
+  <h1>2. System Layers</h1>
+
+  <div class="layer-box">
+    <div class="layer-title">Layer 1 — Data Collection Layer</div>
+    <ul>
+      <li>Manual input: Athlete fills morning check-in (sleep, soreness, mood) and post-training log (workout type, intensity, duration).</li>
+      <li>Automated input: wearable devices or health platforms sync activity, heart rate, sleep duration, step count, and workout summaries.</li>
+      <li>Android-first adapter: Google Health Connect on Android acts as the first synchronized source demonstrated in AfyaNexus.</li>
+      <li>Hybrid nutrition input: diet data is collected either manually or through connected nutrition ecosystems such as mobile health or diet-logging applications.</li>
+    </ul>
+  </div>
+
+  <div class="layer-box green-box">
+    <div class="layer-title">Layer 2 — Central Database Layer</div>
+    <ul>
+      <li>Stores all athlete profiles, training logs, recovery logs, wearable data, nutrition logs, diet plans, and injury predictions.</li>
+      <li>Enforces data relationships: Athlete ↔ Coach (one-to-many), Athlete ↔ Nutritionist (one-to-many).</li>
+    </ul>
+  </div>
+
+  <div class="layer-box orange-box">
+    <div class="layer-title">Layer 3 — Machine Learning Processing Layer</div>
+    <ul>
+      <li>Receives combined training and recovery datasets from the central database.</li>
+      <li>Applies data-quality checks to detect ambiguous or conflicting manual versus wearable entries before prediction is generated.</li>
+      <li>Processes patterns to generate an injury risk score (0–100) and risk level (Low / Medium / High).</li>
+      <li>Outputs predictions back to the central database for dashboard display.</li>
+    </ul>
+  </div>
+
+  <div class="layer-box">
+    <div class="layer-title">Layer 4 — Presentation Layer (Role-Based Dashboards)</div>
+    <ul>
+      <li><strong>Athlete Dashboard:</strong> Personal data, wearable sync status, injury risk gauge.</li>
+      <li><strong>Coach Dashboard:</strong> Sponsored athletes' performance, injury alerts, training suggestions.</li>
+      <li><strong>Nutritionist Dashboard:</strong> Registered athletes' nutrition logs, diet plan tools, performance-nutrition charts, and data-quality review.</li>
+    </ul>
+  </div>
+
+  <div class="layer-box green-box">
+    <div class="layer-title">Layer 5 — Security &amp; Access Control Layer (RBAC)</div>
+    <ul>
+      <li>Registration assigns each user a role: Athlete, Coach, or Nutritionist.</li>
+      <li>Authentication (login) verifies identity and grants role-specific dashboard access.</li>
+      <li>Coaches can only view athletes they sponsor; nutritionists can only view athletes registered under them.</li>
+    </ul>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 3: ENTITIES AND RELATIONSHIPS -->
+  <h1>3. Entities and Relationships</h1>
+  <table>
+    <tr>
+      <th>Entity</th>
+      <th>Role</th>
+      <th>Relationship</th>
+    </tr>
+    <tr>
+      <td><strong>Athlete</strong></td>
+      <td>Primary data source; owns and inputs all personal data</td>
+      <td>Can have one Coach and one Nutritionist</td>
+    </tr>
+    <tr>
+      <td><strong>Coach</strong></td>
+      <td>Monitors and guides athlete training</td>
+      <td>Can sponsor many Athletes (one-to-many)</td>
+    </tr>
+    <tr>
+      <td><strong>Nutritionist</strong></td>
+      <td>Monitors and guides athlete nutrition</td>
+      <td>Can register many Athletes (one-to-many)</td>
+    </tr>
+    <tr>
+      <td><strong>Wearable / Health Platform</strong></td>
+      <td>Automated capture of training and recovery metrics</td>
+      <td>Linked to one Athlete through Bluetooth, mobile health sync, or vendor APIs</td>
+    </tr>
+    <tr>
+      <td><strong>ML Model</strong></td>
+      <td>Injury risk prediction engine</td>
+      <td>Processes data for all Athletes</td>
+    </tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 4: DATA FLOW -->
+  <h1>4. Data Flow Diagram (Textual)</h1>
+  <div class="arch-diagram">
+  [ATHLETE]
+      |
+      |-- Manual Input (Morning Check-In + Training Log)
+      |-- Wearable / Health Sync (Heart Rate, Sleep, Steps, Workout Summaries)
+      |-- Nutrition App / Health Platform Sync (Calories, Macros, Hydration where available)
+      |
+      v
+  [CENTRAL DATABASE]
+      |-- Athletes Table
+      |-- TrainingLogs Table
+      |-- RecoveryLogs Table
+      |-- WearableData Table
+      |-- NutritionLogs Table
+      |-- DietPlans Table
+      |-- InjuryPredictions Table
+      |-- Data Quality / Validation Layer
+      |
+      v
+  [ML PROCESSING LAYER]
+      |-- Input: Training + Recovery + Wearable Data
+      |-- Output: Injury Risk Score (0-100) + Risk Level
+      |
+      v
+  [ROLE-BASED DASHBOARDS]
+      |-- Athlete Dashboard  (own data + risk score)
+      |-- Coach Dashboard    (sponsored athletes only)
+      |-- Nutritionist Dashboard (registered athletes only)
+      |
+      v
+  [RBAC SECURITY LAYER]
+      |-- Registration → Role Assignment
+      |-- Login → Authentication → Dashboard Access
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 5: WEARABLE INTEGRATION -->
+  <h1>5. Wearable Device Integration</h1>
+  <h2>5.1 Device Specifications</h2>
+  <table>
+    <tr>
+      <th>Field</th>
+      <th>Value</th>
+    </tr>
+    <tr><td>Product Name</td><td>T70 Smartwatch</td></tr>
+    <tr><td>Firmware Version</td><td>V00621</td></tr>
+    <tr><td>Bluetooth Address</td><td>70:0A:B7:00:86:D0</td></tr>
+    <tr><td>FCC ID</td><td>2BEJG-T70</td></tr>
+    <tr><td>IC Number</td><td>31964-T70</td></tr>
+    <tr><td>HVIN</td><td>T70</td></tr>
+  </table>
+  <h2>5.2 Data Captured by T70</h2>
+  <ul>
+    <li>Heart rate (real-time and average)</li>
+    <li>Sleep duration and sleep quality metrics</li>
+    <li>Step count and activity logs</li>
+  </ul>
+  <h2>5.3 Integration Flow</h2>
+  <p>
+    The T70 device connects to the athlete's mobile device or system interface via Bluetooth. A sync API endpoint (<code>POST /api/wearable/sync</code>) receives the parsed device data and stores it in the WearableData table. This data is then combined with manual inputs for ML processing.
+  </p>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 6: TECHNOLOGY STACK -->
+  <h1>6. Recommended Technology Stack</h1>
+  <table>
+    <tr>
+      <th>Layer</th>
+      <th>Technology</th>
+    </tr>
+    <tr><td>Frontend</td><td>React.js / Next.js (responsive web dashboards)</td></tr>
+    <tr><td>Backend</td><td>Node.js with Express.js (RESTful API)</td></tr>
+    <tr><td>Database</td><td>PostgreSQL (relational, supports RBAC)</td></tr>
+    <tr><td>ML Model</td><td>Python (scikit-learn / TensorFlow) via Flask API</td></tr>
+    <tr><td>Wearable Sync</td><td>Bluetooth API / Web Bluetooth (T70 integration)</td></tr>
+    <tr><td>Authentication</td><td>JWT (JSON Web Tokens) + bcrypt password hashing</td></tr>
+    <tr><td>Hosting</td><td>AWS EC2 / Vercel (frontend) + AWS RDS (database)</td></tr>
+  </table>
+
+  <div class="footer">
+    AfyaNexus &mdash; System Architecture Document &mdash; Version 1.0 &mdash; Confidential
+  </div>
+
+</div>
+</body>
+</html>

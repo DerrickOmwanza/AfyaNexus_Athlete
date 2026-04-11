@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AfyaNexus – System Design Document</title>
+  <style>
+    body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 12pt; color: #111827; background: #ffffff; margin: 0; padding: 0; }
+    .page { width: 210mm; min-height: 297mm; margin: 0 auto; padding: 25mm 25mm 20mm 30mm; box-sizing: border-box; }
+    .cover { text-align: center; padding-top: 55mm; padding-bottom: 35mm; border-bottom: 3px solid #1E3A8A; margin-bottom: 20mm; }
+    .cover .system-name { font-size: 36pt; font-weight: 700; color: #1E3A8A; letter-spacing: 2px; margin-bottom: 6px; }
+    .cover .doc-title { font-size: 18pt; font-weight: 700; color: #10B981; text-decoration: underline; margin-bottom: 20px; }
+    .cover .tagline { font-size: 11pt; color: #6B7280; font-style: italic; margin-bottom: 36px; }
+    .cover .meta-table { display: inline-block; text-align: left; border: 1px solid #D1D5DB; border-radius: 6px; padding: 14px 28px; background: #F3F4F6; }
+    .cover .meta-table p { margin: 4px 0; font-size: 10.5pt; color: #374151; }
+    .cover .meta-table span { font-weight: 700; color: #1E3A8A; }
+    h1 { font-size: 16pt; font-weight: 700; color: #1E3A8A; text-decoration: underline; border-bottom: 2px solid #1E3A8A; padding-bottom: 4px; margin-top: 28px; margin-bottom: 10px; }
+    h2 { font-size: 13pt; font-weight: 700; color: #10B981; text-decoration: underline; margin-top: 18px; margin-bottom: 8px; }
+    h3 { font-size: 11.5pt; font-weight: 700; color: #F97316; margin-top: 12px; margin-bottom: 6px; }
+    p { line-height: 1.7; margin: 6px 0 10px 0; text-align: justify; }
+    ul, ol { margin: 6px 0 12px 24px; line-height: 1.8; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 10.5pt; }
+    th { background: #1E3A8A; color: #ffffff; padding: 8px 10px; text-align: left; font-weight: 700; }
+    td { padding: 7px 10px; border: 1px solid #D1D5DB; vertical-align: top; }
+    tr:nth-child(even) td { background: #F3F4F6; }
+    .code-block { background: #1E293B; color: #E2E8F0; border-radius: 6px; padding: 14px 18px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: 9.5pt; line-height: 1.7; white-space: pre; overflow-x: auto; }
+    .code-block .keyword { color: #7DD3FC; }
+    .code-block .string { color: #86EFAC; }
+    .code-block .comment { color: #94A3B8; }
+    .endpoint-table th { background: #10B981; }
+    .req-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 9pt; font-weight: 700; margin-right: 6px; }
+    .badge-func { background: #DBEAFE; color: #1E40AF; }
+    .badge-nonfunc { background: #FEF3C7; color: #92400E; }
+    .section-divider { border: none; border-top: 1px solid #E5E7EB; margin: 22px 0; }
+    .footer { text-align: center; font-size: 9pt; color: #9CA3AF; border-top: 1px solid #E5E7EB; padding-top: 10px; margin-top: 40px; }
+    @media print { .page { margin: 0; padding: 20mm 20mm 15mm 25mm; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="system-name">AfyaNexus</div>
+    <div class="doc-title">System Design Document</div>
+    <div class="tagline">Centralized Athlete Training and Nutrition Tracking System</div>
+    <div class="meta-table">
+      <p><span>Document Type:</span> System Design</p>
+      <p><span>Version:</span> 1.0</p>
+      <p><span>Project Name:</span> AfyaNexus</p>
+      <p><span>Category:</span> Capstone Project</p>
+      <p><span>Status:</span> Final Draft</p>
+    </div>
+  </div>
+
+  <!-- SECTION 1: FUNCTIONAL REQUIREMENTS -->
+  <h1>1. Functional Requirements</h1>
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Requirement</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>FR-01</td>
+      <td>Athlete Registration</td>
+      <td>Athletes can register with name, email, password, and role. They are linked to a coach and nutritionist upon registration or later.</td>
+    </tr>
+    <tr>
+      <td>FR-02</td>
+      <td>Morning Check-In</td>
+      <td>Athletes input sleep hours, soreness level (1–10), mood, and any numbness or discomfort each morning.</td>
+    </tr>
+    <tr>
+      <td>FR-03</td>
+      <td>Post-Training Log</td>
+      <td>Athletes log workout type, intensity (1–10), duration, and any post-training notes after each session.</td>
+    </tr>
+    <tr>
+      <td>FR-04</td>
+      <td>Wearable Device Sync</td>
+      <td>The system syncs with supported wearable devices or health platforms to automatically capture heart rate, sleep duration, steps, and activity data.</td>
+    </tr>
+    <tr>
+      <td>FR-05</td>
+      <td>Injury Risk Prediction</td>
+      <td>The ML model processes training and recovery data to generate an injury risk score (0–100) and risk level (Low / Medium / High).</td>
+    </tr>
+    <tr>
+      <td>FR-06</td>
+      <td>Athlete Dashboard</td>
+      <td>Athletes view their personal logs, wearable sync status, and injury risk score on their dashboard.</td>
+    </tr>
+    <tr>
+      <td>FR-07</td>
+      <td>Coach Dashboard</td>
+      <td>Coaches view performance data, injury alerts, and training trends for athletes they sponsor only.</td>
+    </tr>
+    <tr>
+      <td>FR-08</td>
+      <td>Nutritionist Dashboard</td>
+      <td>Nutritionists view nutrition logs and create diet plans for athletes registered under them only.</td>
+    </tr>
+    <tr>
+      <td>FR-09</td>
+      <td>Role-Based Access Control</td>
+      <td>Each user role (Athlete, Coach, Nutritionist) has restricted access to only their authorized data and dashboards.</td>
+    </tr>
+    <tr>
+      <td>FR-10</td>
+      <td>Secure Authentication</td>
+      <td>All users authenticate via email and password. Sessions are managed using JWT tokens.</td>
+    </tr>
+    <tr>
+      <td>FR-11</td>
+      <td>User Profile &amp; Settings Management</td>
+      <td>All users (Athletes, Coaches, Nutritionists) can view and update their profile name, email, and password from a dedicated Settings page within their portal.</td>
+    </tr>
+    <tr>
+      <td>FR-12</td>
+      <td>Hybrid Nutrition Data Collection</td>
+      <td>Nutrition intake can be captured manually by the athlete or imported from connected diet and health applications, then reviewed by the nutritionist.</td>
+    </tr>
+    <tr>
+      <td>FR-13</td>
+      <td>Data Quality Validation</td>
+      <td>The system validates all manual and synced data, flags ambiguous entries, and highlights conflicts between manual logs and wearable-derived metrics.</td>
+    </tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 2: NON-FUNCTIONAL REQUIREMENTS -->
+  <h1>2. Non-Functional Requirements</h1>
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Requirement</th>
+      <th>Target</th>
+    </tr>
+    <tr><td>NFR-01</td><td>Performance</td><td>Dashboard load time under 2 seconds; ML prediction response under 3 seconds.</td></tr>
+    <tr><td>NFR-02</td><td>Scalability</td><td>Support up to 500 concurrent users without performance degradation.</td></tr>
+    <tr><td>NFR-03</td><td>Security</td><td>All passwords hashed with bcrypt; all API endpoints secured with JWT; data encrypted at rest.</td></tr>
+    <tr><td>NFR-04</td><td>Usability</td><td>Intuitive UI with consistent color scheme; mobile-responsive design.</td></tr>
+    <tr><td>NFR-05</td><td>Reliability</td><td>System uptime of 99% or higher.</td></tr>
+    <tr><td>NFR-06</td><td>Data Integrity</td><td>All inputs validated server-side; wearable and nutrition sync data cross-checked against manual entries.</td></tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 3: DATABASE SCHEMA -->
+  <h1>3. Database Schema</h1>
+  <p>The AfyaNexus database uses a relational model (PostgreSQL). Below are the core tables and their key fields.</p>
+
+  <h2>3.1 Athletes Table</h2>
+  <div class="code-block"><span class="keyword">CREATE TABLE</span> Athletes (
+  id              SERIAL PRIMARY KEY,
+  name            VARCHAR(100) NOT NULL,
+  email           VARCHAR(150) UNIQUE NOT NULL,
+  password_hash   TEXT NOT NULL,
+  specialization  VARCHAR(100),          <span class="comment">-- e.g., 100m, marathon</span>
+  coach_id        INT REFERENCES Coaches(id),
+  nutritionist_id INT REFERENCES Nutritionists(id),
+  created_at      TIMESTAMP DEFAULT NOW()
+);</div>
+
+  <h2>3.2 Coaches Table</h2>
+  <div class="code-block"><span class="keyword">CREATE TABLE</span> Coaches (
+  id            SERIAL PRIMARY KEY,
+  name          VARCHAR(100) NOT NULL,
+  email         VARCHAR(150) UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at    TIMESTAMP DEFAULT NOW()
+);</div>
+
+  <h2>3.3 Nutritionists Table</h2>
+  <div class="code-block"><span class="keyword">CREATE TABLE</span> Nutritionists (
+  id            SERIAL PRIMARY KEY,
+  name          VARCHAR(100) NOT NULL,
+  email         VARCHAR(150) UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at    TIMESTAMP DEFAULT NOW()
+);</div>
+
+  <h2>3.4 TrainingLogs Table</h2>
+  <div class="code-block"><span class="keyword">CREATE TABLE</span> TrainingLogs (
+  id           SERIAL PRIMARY KEY,
+  athlete_id   INT REFERENCES Athletes(id) NOT NULL,
+  date         DATE NOT NULL,
+  workout_type VARCHAR(100),             <span class="comment">-- e.g., sprint, endurance</span>
+  intensity    INT CHECK (intensity BETWEEN 1 AND 10),
+  duration_min INT,
+  notes        TEXT,
+  created_at   TIMESTAMP DEFAULT NOW()
+);</div>
+
+  <h2>3.5 RecoveryLogs Table</h2>
+  <div class="code-block"><span class="keyword">CREATE TABLE</span> RecoveryLogs (
+  id             SERIAL PRIMARY KEY,
+  athlete_id     INT REFERENCES Athletes(id) NOT NULL,
+  date           DATE NOT NULL,
+  sleep_hours    DECIMAL(4,2),
+  soreness_level INT CHECK (soreness_level BETWEEN 1 AND 10),
+  mood           VARCHAR(50),            <span class="comment">-- e.g., Good, Tired, Anxious</span>
+  numbness       BOOLEAN DEFAULT FALSE,
+  notes          TEXT,
+  created_at     TIMESTAMP DEFAULT NOW()
+);</div>
+
+  <h2>3.6 WearableData Table</h2>
+  <div class="code-block"><span class="keyword">CREATE TABLE</span> WearableData (
+  id              SERIAL PRIMARY KEY,
+  athlete_id      INT REFERENCES Athletes(id) NOT NULL,
+  date            DATE NOT NULL,
+  heart_rate_avg  INT,
+  sleep_duration  DECIMAL(4,2),
+  steps           INT,
+  device_id       VARCHAR(50),           <span class="comment">-- T70 Bluetooth address</span>
+  synced_at       TIMESTAMP DEFAULT NOW()
+);</div>
+
+  <h2>3.7 InjuryPredictions Table</h2>
+  <div class="code-block"><span class="keyword">CREATE TABLE</span> InjuryPredictions (
+  id          SERIAL PRIMARY KEY,
+  athlete_id  INT REFERENCES Athletes(id) NOT NULL,
+  date        DATE NOT NULL,
+  risk_score  DECIMAL(5,2),             <span class="comment">-- 0.00 to 100.00</span>
+  risk_level  VARCHAR(20),              <span class="comment">-- Low / Medium / High</span>
+  model_ver   VARCHAR(20),
+  created_at  TIMESTAMP DEFAULT NOW()
+);</div>
+
+  <h2>3.8 NutritionLogs Table</h2>
+  <div class="code-block"><span class="keyword">CREATE TABLE</span> NutritionLogs (
+  id          SERIAL PRIMARY KEY,
+  athlete_id  INT REFERENCES Athletes(id) NOT NULL,
+  date        DATE NOT NULL,
+  calories    INT,
+  protein_g   DECIMAL(8,2),
+  carbs_g     DECIMAL(8,2),
+  fats_g      DECIMAL(8,2),
+  meal_notes  TEXT,
+  created_at  TIMESTAMP DEFAULT NOW()
+);</div>
+
+  <div class="code-block"><span class="comment">Optional future extension for clinical nutrition / biomarker integration</span>
+NutritionBiomarkers (
+  id                SERIAL PRIMARY KEY,
+  athlete_id        INT REFERENCES Athletes(id) NOT NULL,
+  collected_at      TIMESTAMP NOT NULL,
+  source_system     VARCHAR(100),       <span class="comment">-- lab, EMR, clinician upload</span>
+  calcium_level     DECIMAL(8,2),
+  iron_level        DECIMAL(8,2),
+  vitamin_d_level   DECIMAL(8,2),
+  notes             TEXT
+);</div>
+
+  <h2>3.9 DietPlans Table</h2>
+  <div class="code-block"><span class="keyword">CREATE TABLE</span> DietPlans (
+  id               SERIAL PRIMARY KEY,
+  nutritionist_id  INT REFERENCES Nutritionists(id) NOT NULL,
+  athlete_id       INT REFERENCES Athletes(id) NOT NULL,
+  plan_name        VARCHAR(150),
+  recommendations  TEXT,
+  created_at       TIMESTAMP DEFAULT NOW(),
+  updated_at       TIMESTAMP DEFAULT NOW()
+);</div>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 4: API ENDPOINTS -->
+  <h1>4. API Endpoints</h1>
+
+  <h2>4.1 Authentication</h2>
+  <table class="endpoint-table">
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>POST</td><td>/api/auth/register</td><td>Register a new user (Athlete, Coach, or Nutritionist) with role assignment.</td></tr>
+    <tr><td>POST</td><td>/api/auth/login</td><td>Authenticate user and return JWT token with role-based dashboard redirect.</td></tr>
+    <tr><td>GET</td><td>/api/auth/onboarding-options</td><td>Return available coaches and nutritionists for athlete onboarding and assignment.</td></tr>
+    <tr><td>POST</td><td>/api/auth/logout</td><td>Invalidate the current session token.</td></tr>
+  </table>
+
+  <h2>4.2 Athlete APIs</h2>
+  <table class="endpoint-table">
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>POST</td><td>/api/athlete/sources/health-connect/import</td><td>Import normalized Android Health Connect data for recovery, wearable metrics, training, and nutrition logs.</td></tr>
+    <tr><td>GET</td><td>/api/athlete/dashboard</td><td>Retrieve athlete's personal dashboard data (logs + risk score).</td></tr>
+    <tr><td>POST</td><td>/api/athlete/recovery-log</td><td>Submit morning check-in (sleep, soreness, mood, numbness).</td></tr>
+    <tr><td>POST</td><td>/api/athlete/training-log</td><td>Submit post-training log (workout type, intensity, duration).</td></tr>
+    <tr><td>POST</td><td>/api/athlete/nutrition-log</td><td>Submit daily nutrition log (calories, protein, carbs, fats, meal notes).</td></tr>
+    <tr><td>GET</td><td>/api/athlete/reports</td><td>Retrieve 30-day performance and health trend data for the athlete reports page.</td></tr>
+    <tr><td>GET</td><td>/api/athlete/wearable</td><td>Retrieve registered device ID and last 10 wearable sync entries.</td></tr>
+    <tr><td>POST</td><td>/api/athlete/wearable/sync</td><td>Sync T70 wearable data (heart rate, sleep, steps) to the athlete's profile.</td></tr>
+  </table>
+
+  <h2>4.3 Coach APIs</h2>
+  <table class="endpoint-table">
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/api/coach/athletes</td><td>List all athletes sponsored by the authenticated coach.</td></tr>
+    <tr><td>GET</td><td>/api/coach/dashboard/:athlete_id</td><td>View full performance dashboard for a specific sponsored athlete.</td></tr>
+    <tr><td>GET</td><td>/api/coach/injury-alerts</td><td>Retrieve injury risk alerts for all sponsored athletes.</td></tr>
+  </table>
+
+  <h2>4.4 Nutritionist APIs</h2>
+  <table class="endpoint-table">
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/api/nutritionist/athletes</td><td>List all athletes registered under the authenticated nutritionist.</td></tr>
+    <tr><td>GET</td><td>/api/nutritionist/athletes/:athlete_id/dashboard</td><td>View nutrition logs and performance data for a specific registered athlete.</td></tr>
+    <tr><td>GET</td><td>/api/nutritionist/diet-plans</td><td>Retrieve all diet plans across all athletes registered under the nutritionist.</td></tr>
+    <tr><td>POST</td><td>/api/nutritionist/diet-plan</td><td>Create a new diet plan for a registered athlete.</td></tr>
+  </table>
+
+  <h2>4.5 Settings &amp; Profile API</h2>
+  <table class="endpoint-table">
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/api/auth/profile</td><td>Retrieve the authenticated user's profile (name, email, role).</td></tr>
+    <tr><td>PUT</td><td>/api/auth/profile</td><td>Update the authenticated user's name and/or email.</td></tr>
+    <tr><td>PUT</td><td>/api/auth/password</td><td>Update the authenticated user's password (requires current password verification).</td></tr>
+  </table>
+
+  <h2>4.6 ML Prediction API</h2>
+  <table class="endpoint-table">
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>POST</td><td>/api/ml/predict</td><td>Trigger injury risk prediction for a specific athlete using their latest training and recovery data.</td></tr>
+    <tr><td>GET</td><td>/api/ml/history/:athlete_id</td><td>Retrieve historical injury risk predictions for an athlete.</td></tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 5: UI DESIGN NOTES -->
+  <h1>5. User Interface Design Notes</h1>
+
+  <h2>5.1 Color Palette</h2>
+  <table>
+    <tr><th>Role</th><th>Color</th><th>Hex Code</th><th>Purpose</th></tr>
+    <tr><td>Primary</td><td>Deep Blue</td><td>#1E3A8A</td><td>Headers, navigation, primary buttons</td></tr>
+    <tr><td>Secondary</td><td>Emerald Green</td><td>#10B981</td><td>Success states, health indicators</td></tr>
+    <tr><td>Accent</td><td>Warm Orange</td><td>#F97316</td><td>Alerts, highlights, injury risk indicators</td></tr>
+    <tr><td>Background</td><td>Soft Gray</td><td>#F3F4F6</td><td>Page backgrounds, card backgrounds</td></tr>
+    <tr><td>Text</td><td>Charcoal Black</td><td>#111827</td><td>Body text, labels</td></tr>
+  </table>
+
+  <h2>5.2 Athlete Dashboard Layout</h2>
+  <ul>
+    <li><strong>Top Bar:</strong> Athlete profile, T70 sync status indicator, notification bell.</li>
+    <li><strong>Sidebar:</strong> Dashboard, Training Log, Recovery Log, Nutrition Log, Wearable Sync, Reports, Settings.</li>
+    <li><strong>Main Area:</strong>
+      <ul>
+        <li>Sleep Duration Card (hours + quality indicator)</li>
+        <li>Morning Check-In Card (soreness, mood, numbness)</li>
+        <li>Workout Summary Card (type, intensity, duration)</li>
+        <li>Injury Risk Gauge (visual 0–100 score with color-coded risk level)</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>5.3 Coach Dashboard Layout</h2>
+  <ul>
+    <li><strong>Top Bar:</strong> Coach profile, notification bell.</li>
+    <li><strong>Sidebar:</strong> Dashboard, My Athletes, Settings.</li>
+    <li><strong>Settings Page:</strong> Update profile name, email, and password.</li>
+    <li><strong>Main Area:</strong>
+      <ul>
+        <li>Athlete List (with injury risk badges)</li>
+        <li>Performance Overview Graph (training load over time)</li>
+        <li>Injury Risk Alerts Panel (color-coded: green/orange/red)</li>
+        <li>Training Suggestions Section</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>5.4 Nutritionist Dashboard Layout</h2>
+  <ul>
+    <li><strong>Top Bar:</strong> Nutritionist profile, notification bell.</li>
+    <li><strong>Sidebar:</strong> Dashboard, My Athletes, Diet Plans, Settings.</li>
+    <li><strong>Settings Page:</strong> Update profile name, email, and password.</li>
+    <li><strong>Main Area:</strong>
+      <ul>
+        <li>Athlete List (with nutrition compliance indicators)</li>
+        <li>Nutrition Logs Table (meal type, description, calories)</li>
+        <li>Diet Plan Creator (form to add/edit recommendations)</li>
+        <li>Performance-Nutrition Correlation Chart</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="footer">
+    AfyaNexus &mdash; System Design Document &mdash; Version 1.0 &mdash; Confidential
+  </div>
+
+</div>
+</body>
+</html>

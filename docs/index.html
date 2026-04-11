@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AfyaNexus – Documentation Hub</title>
+  <style>
+    body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 12pt; color: #111827; background: #F3F4F6; margin: 0; padding: 0; }
+    .header {
+      background: #1E3A8A;
+      color: #ffffff;
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header .brand { font-size: 28pt; font-weight: 700; letter-spacing: 2px; }
+    .header .subtitle { font-size: 11pt; color: #93C5FD; margin-top: 4px; }
+    .header .badge { background: #10B981; color: #ffffff; padding: 4px 14px; border-radius: 20px; font-size: 9.5pt; font-weight: 700; }
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+    .intro { background: #ffffff; border-radius: 10px; padding: 24px 28px; margin-bottom: 32px; border-left: 5px solid #1E3A8A; }
+    .intro h2 { color: #1E3A8A; font-size: 14pt; margin: 0 0 10px 0; text-decoration: underline; }
+    .intro p { margin: 0; line-height: 1.7; color: #374151; }
+    .docs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .doc-card {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px 22px;
+      border: 1px solid #E5E7EB;
+      transition: box-shadow 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .doc-card:hover { box-shadow: 0 4px 16px rgba(30,58,138,0.12); border-color: #1E3A8A; }
+    .doc-card .doc-num { font-size: 9pt; font-weight: 700; color: #10B981; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .doc-card .doc-title { font-size: 12.5pt; font-weight: 700; color: #1E3A8A; margin-bottom: 8px; }
+    .doc-card .doc-desc { font-size: 10pt; color: #6B7280; line-height: 1.6; }
+    .doc-card .doc-link { display: inline-block; margin-top: 12px; font-size: 9.5pt; font-weight: 700; color: #1E3A8A; text-decoration: none; border: 1px solid #1E3A8A; padding: 4px 12px; border-radius: 4px; }
+    .doc-card .doc-link:hover { background: #1E3A8A; color: #ffffff; }
+    .instructions { background: #ECFDF5; border-radius: 10px; padding: 20px 24px; margin-top: 32px; border-left: 5px solid #10B981; }
+    .instructions h3 { color: #065F46; font-size: 12pt; margin: 0 0 10px 0; text-decoration: underline; }
+    .instructions ol { margin: 0 0 0 20px; color: #374151; line-height: 1.9; }
+    .footer { text-align: center; padding: 24px; color: #9CA3AF; font-size: 9.5pt; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div>
+      <div class="brand">AfyaNexus</div>
+      <div class="subtitle">Centralized Athlete Training and Nutrition Tracking System</div>
+    </div>
+    <div class="badge">Documentation Hub</div>
+  </div>
+
+  <div class="container">
+
+    <div class="intro">
+      <h2>About This Documentation Set</h2>
+      <p>
+        This folder contains the complete documentation package for the AfyaNexus capstone project. The set now includes the core proposal, design, testing, integration, and progress-stage presentation materials. Open each file in your browser, then use <strong>File → Print → Save as PDF</strong> or open directly in Microsoft Word to save as <strong>.docx</strong>.
+      </p>
+    </div>
+
+    <div class="docs-grid">
+
+      <a class="doc-card" href="01_System_Proposal.html">
+        <div class="doc-num">Document 01</div>
+        <div class="doc-title">System Proposal Document</div>
+        <div class="doc-desc">Full academic proposal including abstract, problem statement, objectives, significance, scope, methodology, and references.</div>
+        <span class="doc-link">Open Document →</span>
+      </a>
+
+      <a class="doc-card" href="02_Concept_Paper.html">
+        <div class="doc-num">Document 02</div>
+        <div class="doc-title">Concept Paper</div>
+        <div class="doc-desc">Short, presentation-ready overview of AfyaNexus — problem, solution, key features, target users, and innovation highlights.</div>
+        <span class="doc-link">Open Document →</span>
+      </a>
+
+      <a class="doc-card" href="03_System_Architecture.html">
+        <div class="doc-num">Document 03</div>
+        <div class="doc-title">System Architecture Document</div>
+        <div class="doc-desc">Layered architecture overview, entity relationships, data flow diagram, wearable integration, and recommended technology stack.</div>
+        <span class="doc-link">Open Document →</span>
+      </a>
+
+      <a class="doc-card" href="04_System_Design.html">
+        <div class="doc-num">Document 04</div>
+        <div class="doc-title">System Design Document</div>
+        <div class="doc-desc">Functional and non-functional requirements, full database schema (SQL), all API endpoints, and UI design notes per dashboard.</div>
+        <span class="doc-link">Open Document →</span>
+      </a>
+
+      <a class="doc-card" href="05_Wireframe_Sitemap.html">
+        <div class="doc-num">Document 05</div>
+        <div class="doc-title">Wireframe &amp; Sitemap Document</div>
+        <div class="doc-desc">Visual wireframes for all three dashboards (Athlete, Coach, Nutritionist) and the full system navigation sitemap.</div>
+        <span class="doc-link">Open Document →</span>
+      </a>
+
+      <a class="doc-card" href="06_Testing_Evaluation_Plan.html">
+        <div class="doc-num">Document 06</div>
+        <div class="doc-title">Testing &amp; Evaluation Plan</div>
+        <div class="doc-desc">Unit, integration, system, UAT, performance, and security test cases with evaluation metrics and success criteria.</div>
+        <span class="doc-link">Open Document →</span>
+      </a>
+
+      <a class="doc-card" href="07_Wearable_Integration_Notes.html">
+        <div class="doc-num">Document 07</div>
+        <div class="doc-title">Wearable Device Integration Notes</div>
+        <div class="doc-desc">T70 smartwatch specifications, data captured, Bluetooth integration flow, API endpoint details, and known limitations.</div>
+        <span class="doc-link">Open Document →</span>
+      </a>
+
+      <a class="doc-card" href="08_Progress_Stage_Report.html">
+        <div class="doc-num">Document 08</div>
+        <div class="doc-title">Progress Stage Report</div>
+        <div class="doc-desc">APA-style progress report aligned to institutional requirements, including project definition, justification, literature review, methodology, design, and project management.</div>
+        <span class="doc-link">Open Document →</span>
+      </a>
+
+      <a class="doc-card" href="09_Presentation_Content_Pack.html">
+        <div class="doc-num">Document 09</div>
+        <div class="doc-title">Presentation Content Pack</div>
+        <div class="doc-desc">Five-minute presentation structure, slide-by-slide content, speaker notes, timing, and visual recommendations tailored to AfyaNexus.</div>
+        <span class="doc-link">Open Document →</span>
+      </a>
+
+    </div>
+
+    <div class="instructions">
+      <h3>How to Convert to Word (.docx)</h3>
+      <ol>
+        <li>Open any document file (e.g., <code>01_System_Proposal.html</code>) in <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong>.</li>
+        <li>Press <strong>Ctrl + P</strong> to open the print dialog.</li>
+        <li>Select <strong>"Save as PDF"</strong> to get a clean PDF version, OR</li>
+        <li>Open the <code>.html</code> file directly in <strong>Microsoft Word</strong> (File → Open → select the .html file) — Word will import it with formatting intact.</li>
+        <li>Save as <strong>.docx</strong> from within Word.</li>
+      </ol>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    AfyaNexus Documentation Hub &mdash; Capstone Project &mdash; All documents are Version 1.0
+  </div>
+
+</body>
+</html>

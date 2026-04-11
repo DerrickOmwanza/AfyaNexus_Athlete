@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AfyaNexus – Wireframe &amp; Sitemap Document</title>
+  <style>
+    body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 12pt; color: #111827; background: #ffffff; margin: 0; padding: 0; }
+    .page { width: 210mm; min-height: 297mm; margin: 0 auto; padding: 25mm 25mm 20mm 30mm; box-sizing: border-box; }
+    .cover { text-align: center; padding-top: 55mm; padding-bottom: 35mm; border-bottom: 3px solid #1E3A8A; margin-bottom: 20mm; }
+    .cover .system-name { font-size: 36pt; font-weight: 700; color: #1E3A8A; letter-spacing: 2px; margin-bottom: 6px; }
+    .cover .doc-title { font-size: 18pt; font-weight: 700; color: #10B981; text-decoration: underline; margin-bottom: 20px; }
+    .cover .tagline { font-size: 11pt; color: #6B7280; font-style: italic; margin-bottom: 36px; }
+    .cover .meta-table { display: inline-block; text-align: left; border: 1px solid #D1D5DB; border-radius: 6px; padding: 14px 28px; background: #F3F4F6; }
+    .cover .meta-table p { margin: 4px 0; font-size: 10.5pt; color: #374151; }
+    .cover .meta-table span { font-weight: 700; color: #1E3A8A; }
+    h1 { font-size: 16pt; font-weight: 700; color: #1E3A8A; text-decoration: underline; border-bottom: 2px solid #1E3A8A; padding-bottom: 4px; margin-top: 28px; margin-bottom: 10px; }
+    h2 { font-size: 13pt; font-weight: 700; color: #10B981; text-decoration: underline; margin-top: 18px; margin-bottom: 8px; }
+    h3 { font-size: 11.5pt; font-weight: 700; color: #F97316; margin-top: 12px; margin-bottom: 6px; }
+    p { line-height: 1.7; margin: 6px 0 10px 0; text-align: justify; }
+    ul, ol { margin: 6px 0 12px 24px; line-height: 1.8; }
+    li { margin-bottom: 4px; }
+    /* Wireframe boxes */
+    .wireframe {
+      border: 2px solid #1E3A8A;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 16px 0;
+      font-size: 10pt;
+    }
+    .wf-topbar {
+      background: #1E3A8A;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .wf-body {
+      display: flex;
+      min-height: 200px;
+    }
+    .wf-sidebar {
+      background: #1E3A8A;
+      color: #ffffff;
+      width: 130px;
+      min-width: 130px;
+      padding: 14px 10px;
+      font-size: 9.5pt;
+    }
+    .wf-sidebar .nav-item {
+      padding: 5px 8px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+      cursor: pointer;
+    }
+    .wf-sidebar .nav-item.active { background: #10B981; font-weight: 700; }
+    .wf-main {
+      flex: 1;
+      background: #F3F4F6;
+      padding: 14px;
+    }
+    .card-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .wf-card {
+      background: #ffffff;
+      border: 1px solid #D1D5DB;
+      border-radius: 6px;
+      padding: 10px 12px;
+      flex: 1;
+      min-width: 100px;
+    }
+    .wf-card .card-label { font-size: 8.5pt; color: #6B7280; margin-bottom: 4px; }
+    .wf-card .card-value { font-size: 11pt; font-weight: 700; color: #1E3A8A; }
+    .wf-card .card-sub { font-size: 8pt; color: #9CA3AF; }
+    .risk-gauge {
+      background: #ffffff;
+      border: 1px solid #D1D5DB;
+      border-radius: 6px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .risk-gauge .gauge-label { font-size: 8.5pt; color: #6B7280; margin-bottom: 6px; }
+    .risk-bar { height: 14px; border-radius: 7px; background: linear-gradient(to right, #10B981, #F97316, #EF4444); margin: 6px 0; position: relative; }
+    .risk-indicator { position: absolute; top: -3px; width: 20px; height: 20px; background: #1E3A8A; border-radius: 50%; left: 40%; transform: translateX(-50%); }
+    .risk-score { font-size: 18pt; font-weight: 700; color: #F97316; }
+    .risk-level { font-size: 9pt; color: #F97316; font-weight: 700; }
+    .alert-item { background: #FFF7ED; border-left: 3px solid #F97316; padding: 6px 10px; margin-bottom: 6px; border-radius: 0 4px 4px 0; font-size: 9.5pt; }
+    .alert-item.high { background: #FEF2F2; border-color: #EF4444; }
+    .alert-item.low { background: #ECFDF5; border-color: #10B981; }
+    .chart-placeholder { background: #EFF6FF; border: 1px dashed #93C5FD; border-radius: 6px; padding: 20px; text-align: center; color: #3B82F6; font-size: 9.5pt; margin-bottom: 10px; }
+    /* Sitemap */
+    .sitemap { font-family: 'Courier New', monospace; font-size: 9.5pt; background: #F3F4F6; border: 1px solid #D1D5DB; border-radius: 8px; padding: 18px 22px; line-height: 2; white-space: pre; color: #111827; }
+    .sitemap .node-main { color: #1E3A8A; font-weight: 700; }
+    .sitemap .node-sub { color: #10B981; }
+    .sitemap .node-leaf { color: #374151; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 10.5pt; }
+    th { background: #1E3A8A; color: #ffffff; padding: 8px 10px; text-align: left; font-weight: 700; }
+    td { padding: 7px 10px; border: 1px solid #D1D5DB; vertical-align: top; }
+    tr:nth-child(even) td { background: #F3F4F6; }
+    .section-divider { border: none; border-top: 1px solid #E5E7EB; margin: 22px 0; }
+    .footer { text-align: center; font-size: 9pt; color: #9CA3AF; border-top: 1px solid #E5E7EB; padding-top: 10px; margin-top: 40px; }
+    @media print { .page { margin: 0; padding: 20mm 20mm 15mm 25mm; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="system-name">AfyaNexus</div>
+    <div class="doc-title">Wireframe &amp; Sitemap Document</div>
+    <div class="tagline">Centralized Athlete Training and Nutrition Tracking System</div>
+    <div class="meta-table">
+      <p><span>Document Type:</span> Wireframe &amp; Sitemap</p>
+      <p><span>Version:</span> 1.0</p>
+      <p><span>Project Name:</span> AfyaNexus</p>
+      <p><span>Category:</span> Capstone Project</p>
+      <p><span>Status:</span> Final Draft</p>
+    </div>
+  </div>
+
+  <!-- SECTION 1: COLOR PALETTE -->
+  <h1>1. Color Palette Reference</h1>
+  <table>
+    <tr><th>Name</th><th>Hex Code</th><th>Usage</th></tr>
+    <tr><td>Deep Blue</td><td>#1E3A8A</td><td>Navigation, headers, primary buttons, sidebar</td></tr>
+    <tr><td>Emerald Green</td><td>#10B981</td><td>Active states, success indicators, health metrics</td></tr>
+    <tr><td>Warm Orange</td><td>#F97316</td><td>Alerts, injury risk indicators, highlights</td></tr>
+    <tr><td>Soft Gray</td><td>#F3F4F6</td><td>Page backgrounds, card backgrounds</td></tr>
+    <tr><td>Charcoal Black</td><td>#111827</td><td>Body text, labels, data values</td></tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 2: ATHLETE DASHBOARD WIREFRAME -->
+  <h1>2. Athlete Dashboard Wireframe</h1>
+  <p>The athlete dashboard is the primary interface for data entry and personal performance monitoring.</p>
+
+  <div class="wireframe">
+    <div class="wf-topbar">
+      <span>AfyaNexus</span>
+      <span>👤 Athlete Name &nbsp;|&nbsp; ⌚ T70: Synced &nbsp;|&nbsp; 🔔</span>
+    </div>
+    <div class="wf-body">
+      <div class="wf-sidebar">
+        <div class="nav-item active">📊 Dashboard</div>
+        <div class="nav-item">🏋️ Training Log</div>
+        <div class="nav-item">😴 Recovery Log</div>
+        <div class="nav-item">🍎 Nutrition Log</div>
+        <div class="nav-item">⌚ Wearable Sync</div>
+        <div class="nav-item">📈 Reports</div>
+        <div class="nav-item">⚙️ Settings</div>
+      </div>
+      <div class="wf-main">
+        <div class="card-row">
+          <div class="wf-card">
+            <div class="card-label">Sleep Duration</div>
+            <div class="card-value">7.5 hrs</div>
+            <div class="card-sub">Last night</div>
+          </div>
+          <div class="wf-card">
+            <div class="card-label">Soreness Level</div>
+            <div class="card-value">4 / 10</div>
+            <div class="card-sub">This morning</div>
+          </div>
+          <div class="wf-card">
+            <div class="card-label">Mood</div>
+            <div class="card-value">Good</div>
+            <div class="card-sub">Check-in</div>
+          </div>
+          <div class="wf-card">
+            <div class="card-label">Workout Today</div>
+            <div class="card-value">Sprint</div>
+            <div class="card-sub">Intensity: 8/10</div>
+          </div>
+        </div>
+        <div class="risk-gauge">
+          <div class="gauge-label">Injury Risk Score</div>
+          <div class="risk-bar"><div class="risk-indicator"></div></div>
+          <div class="risk-score">42</div>
+          <div class="risk-level">⚠️ MEDIUM RISK</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 3: COACH DASHBOARD WIREFRAME -->
+  <h1>3. Coach Dashboard Wireframe</h1>
+  <p>The coach dashboard provides a performance overview and injury alerts for all sponsored athletes.</p>
+
+  <div class="wireframe">
+    <div class="wf-topbar">
+      <span>AfyaNexus</span>
+      <span>👤 Coach Name &nbsp;|&nbsp; 🔔 2 Alerts</span>
+    </div>
+    <div class="wf-body">
+      <div class="wf-sidebar">
+        <div class="nav-item active">📊 Dashboard</div>
+        <div class="nav-item">👥 My Athletes</div>
+        <div class="nav-item">⚙️ Settings</div>
+      </div>
+      <div class="wf-main">
+        <div class="card-row">
+          <div class="wf-card">
+            <div class="card-label">Total Athletes</div>
+            <div class="card-value">8</div>
+            <div class="card-sub">Sponsored</div>
+          </div>
+          <div class="wf-card">
+            <div class="card-label">High Risk</div>
+            <div class="card-value" style="color:#EF4444;">2</div>
+            <div class="card-sub">Needs attention</div>
+          </div>
+          <div class="wf-card">
+            <div class="card-label">Medium Risk</div>
+            <div class="card-value" style="color:#F97316;">3</div>
+            <div class="card-sub">Monitor closely</div>
+          </div>
+          <div class="wf-card">
+            <div class="card-label">Low Risk</div>
+            <div class="card-value" style="color:#10B981;">3</div>
+            <div class="card-sub">On track</div>
+          </div>
+        </div>
+        <div class="chart-placeholder">📈 Performance Overview Graph — Training Load Over Time (7-day trend per athlete)</div>
+        <div class="alert-item high">🔴 Athlete A — High Injury Risk (Score: 78) — Reduce training intensity</div>
+        <div class="alert-item">🟠 Athlete B — Medium Risk (Score: 55) — Monitor sleep patterns</div>
+        <div class="alert-item low">🟢 Athlete C — Low Risk (Score: 22) — Performing well</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 4: NUTRITIONIST DASHBOARD WIREFRAME -->
+  <h1>4. Nutritionist Dashboard Wireframe</h1>
+  <p>The nutritionist dashboard enables diet plan management and nutrition-performance correlation analysis.</p>
+
+  <div class="wireframe">
+    <div class="wf-topbar">
+      <span>AfyaNexus</span>
+      <span>👤 Nutritionist Name &nbsp;|&nbsp; 🔔</span>
+    </div>
+    <div class="wf-body">
+      <div class="wf-sidebar">
+        <div class="nav-item active">📊 Dashboard</div>
+        <div class="nav-item">👥 My Athletes</div>
+        <div class="nav-item">⚙️ Settings</div>
+      </div>
+      <div class="wf-main">
+        <div class="card-row">
+          <div class="wf-card">
+            <div class="card-label">Registered Athletes</div>
+            <div class="card-value">6</div>
+            <div class="card-sub">Active</div>
+          </div>
+          <div class="wf-card">
+            <div class="card-label">Diet Plans</div>
+            <div class="card-value">6</div>
+            <div class="card-sub">Active plans</div>
+          </div>
+          <div class="wf-card">
+            <div class="card-label">Compliance Rate</div>
+            <div class="card-value" style="color:#10B981;">83%</div>
+            <div class="card-sub">This week</div>
+          </div>
+        </div>
+        <div class="chart-placeholder">📊 Nutrition vs Performance Correlation Chart — Caloric intake vs Training intensity (per athlete)</div>
+        <div class="wf-card" style="margin-top:8px;">
+          <div class="card-label">Athlete D — Nutrition Log (Today)</div>
+          <div style="font-size:9.5pt; color:#374151; margin-top:4px;">
+            🍳 Breakfast: Oats, banana, milk — 450 kcal<br/>
+            🥗 Lunch: Rice, chicken, vegetables — 620 kcal<br/>
+            🍎 Snack: Apple, nuts — 180 kcal
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 5: SITEMAP -->
+  <h1>5. System Sitemap</h1>
+  <p>The sitemap below outlines the full navigation structure of AfyaNexus, organized by user role.</p>
+
+  <div class="sitemap"><span class="node-main">AfyaNexus System Sitemap</span>
+<span class="node-main">│</span>
+<span class="node-main">├── [PUBLIC]</span>
+<span class="node-sub">│   ├── Landing Page</span>
+<span class="node-leaf">│   ├── Login</span>
+<span class="node-leaf">│   └── Register (Role Selection: Athlete / Coach / Nutritionist)</span>
+<span class="node-main">│</span>
+<span class="node-main">├── [ATHLETE PORTAL]</span>
+<span class="node-sub">│   ├── Dashboard (Overview)</span>
+<span class="node-leaf">│   │   ├── Sleep Duration Card</span>
+<span class="node-leaf">│   │   ├── Morning Check-In Card</span>
+<span class="node-leaf">│   │   ├── Workout Summary Card</span>
+<span class="node-leaf">│   │   └── Injury Risk Gauge</span>
+<span class="node-sub">│   ├── Training Log</span>
+<span class="node-leaf">│   │   ├── Add Training Entry</span>
+<span class="node-leaf">│   │   └── View Training History</span>
+<span class="node-sub">│   ├── Recovery Log</span>
+<span class="node-leaf">│   │   ├── Morning Check-In Form</span>
+<span class="node-leaf">│   │   └── View Recovery History</span>
+<span class="node-sub">│   ├── Nutrition Log</span>
+<span class="node-leaf">│   │   └── Daily Nutrition Entry Form (Calories, Protein, Carbs, Fats)</span>
+<span class="node-sub">│   ├── Wearable Sync</span>
+<span class="node-leaf">│   │   ├── Device Registration Status</span>
+<span class="node-leaf">│   │   ├── Manual Sync Form (Heart Rate, Sleep, Steps)</span>
+<span class="node-leaf">│   │   └── Sync History Table</span>
+<span class="node-sub">│   ├── Reports</span>
+<span class="node-leaf">│   │   ├── Injury Risk Score Trend Chart</span>
+<span class="node-leaf">│   │   ├── Training Load Chart</span>
+<span class="node-leaf">│   │   ├── Sleep &amp; Soreness Trend Chart</span>
+<span class="node-leaf">│   │   └── Nutrition Summary Table</span>
+<span class="node-sub">│   └── Settings</span>
+<span class="node-leaf">│       ├── Update Profile (Name, Email)</span>
+<span class="node-leaf">│       └── Change Password</span>
+<span class="node-main">│</span>
+<span class="node-main">├── [COACH PORTAL]</span>
+<span class="node-sub">│   ├── Dashboard (Overview)</span>
+<span class="node-leaf">│   │   ├── Athlete Risk Summary Cards</span>
+<span class="node-leaf">│   │   ├── Performance Overview Graph</span>
+<span class="node-leaf">│   │   └── Injury Alerts Panel</span>
+<span class="node-sub">│   ├── My Athletes</span>
+<span class="node-leaf">│   │   ├── Athlete List</span>
+<span class="node-leaf">│   │   └── Individual Athlete Dashboard View</span>
+<span class="node-sub">│   └── Settings</span>
+<span class="node-leaf">│       ├── Update Profile (Name, Email)</span>
+<span class="node-leaf">│       └── Change Password</span>
+<span class="node-main">│</span>
+<span class="node-main">└── [NUTRITIONIST PORTAL]</span>
+<span class="node-sub">    ├── Dashboard (Overview)</span>
+<span class="node-leaf">    │   ├── Athlete Compliance Cards</span>
+<span class="node-leaf">    │   ├── Nutrition vs Performance Chart</span>
+<span class="node-leaf">    │   └── Recent Nutrition Logs</span>
+<span class="node-sub">    ├── My Athletes</span>
+<span class="node-leaf">    │   ├── Athlete List</span>
+<span class="node-leaf">    │   ├── Individual Athlete Nutrition Dashboard</span>
+<span class="node-leaf">    │   └── Diet Plan Creator / Editor</span>
+<span class="node-sub">    ├── Diet Plans</span>
+<span class="node-leaf">    │   ├── All Plans List (filterable by athlete)</span>
+<span class="node-leaf">    │   └── Create New Diet Plan Form</span>
+<span class="node-sub">    └── Settings</span>
+<span class="node-leaf">        ├── Update Profile (Name, Email)</span>
+<span class="node-leaf">        └── Change Password</span></div>
+
+  <div class="footer">
+    AfyaNexus &mdash; Wireframe &amp; Sitemap Document &mdash; Version 1.0 &mdash; Confidential
+  </div>
+
+</div>
+</body>
+</html>

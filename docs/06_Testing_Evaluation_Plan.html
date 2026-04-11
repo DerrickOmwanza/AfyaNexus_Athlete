@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AfyaNexus – Testing &amp; Evaluation Plan</title>
+  <style>
+    body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 12pt; color: #111827; background: #ffffff; margin: 0; padding: 0; }
+    .page { width: 210mm; min-height: 297mm; margin: 0 auto; padding: 25mm 25mm 20mm 30mm; box-sizing: border-box; }
+    .cover { text-align: center; padding-top: 55mm; padding-bottom: 35mm; border-bottom: 3px solid #1E3A8A; margin-bottom: 20mm; }
+    .cover .system-name { font-size: 36pt; font-weight: 700; color: #1E3A8A; letter-spacing: 2px; margin-bottom: 6px; }
+    .cover .doc-title { font-size: 18pt; font-weight: 700; color: #10B981; text-decoration: underline; margin-bottom: 20px; }
+    .cover .tagline { font-size: 11pt; color: #6B7280; font-style: italic; margin-bottom: 36px; }
+    .cover .meta-table { display: inline-block; text-align: left; border: 1px solid #D1D5DB; border-radius: 6px; padding: 14px 28px; background: #F3F4F6; }
+    .cover .meta-table p { margin: 4px 0; font-size: 10.5pt; color: #374151; }
+    .cover .meta-table span { font-weight: 700; color: #1E3A8A; }
+    h1 { font-size: 16pt; font-weight: 700; color: #1E3A8A; text-decoration: underline; border-bottom: 2px solid #1E3A8A; padding-bottom: 4px; margin-top: 28px; margin-bottom: 10px; }
+    h2 { font-size: 13pt; font-weight: 700; color: #10B981; text-decoration: underline; margin-top: 18px; margin-bottom: 8px; }
+    h3 { font-size: 11.5pt; font-weight: 700; color: #F97316; margin-top: 12px; margin-bottom: 6px; }
+    p { line-height: 1.7; margin: 6px 0 10px 0; text-align: justify; }
+    ul, ol { margin: 6px 0 12px 24px; line-height: 1.8; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 10.5pt; }
+    th { background: #1E3A8A; color: #ffffff; padding: 8px 10px; text-align: left; font-weight: 700; }
+    td { padding: 7px 10px; border: 1px solid #D1D5DB; vertical-align: top; }
+    tr:nth-child(even) td { background: #F3F4F6; }
+    .pass { color: #10B981; font-weight: 700; }
+    .fail { color: #EF4444; font-weight: 700; }
+    .pending { color: #F97316; font-weight: 700; }
+    .metric-box { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 12px 16px; margin: 10px 0; }
+    .metric-box .metric-title { font-weight: 700; color: #1E3A8A; font-size: 11pt; margin-bottom: 6px; }
+    .metric-box p { margin: 0; font-size: 10.5pt; color: #374151; }
+    .section-divider { border: none; border-top: 1px solid #E5E7EB; margin: 22px 0; }
+    .footer { text-align: center; font-size: 9pt; color: #9CA3AF; border-top: 1px solid #E5E7EB; padding-top: 10px; margin-top: 40px; }
+    @media print { .page { margin: 0; padding: 20mm 20mm 15mm 25mm; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="system-name">AfyaNexus</div>
+    <div class="doc-title">Testing &amp; Evaluation Plan</div>
+    <div class="tagline">Centralized Athlete Training and Nutrition Tracking System</div>
+    <div class="meta-table">
+      <p><span>Document Type:</span> Testing &amp; Evaluation Plan</p>
+      <p><span>Version:</span> 1.0</p>
+      <p><span>Project Name:</span> AfyaNexus</p>
+      <p><span>Category:</span> Capstone Project</p>
+      <p><span>Status:</span> Final Draft</p>
+    </div>
+  </div>
+
+  <!-- SECTION 1: OVERVIEW -->
+  <h1>1. Overview</h1>
+  <p>
+    This document outlines the testing and evaluation strategy for AfyaNexus. The plan covers all testing phases — unit, integration, system, user acceptance, performance, and security — to ensure the system meets its functional and non-functional requirements before final deployment and presentation.
+  </p>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 2: UNIT TESTING -->
+  <h1>2. Unit Testing</h1>
+  <p><strong>Purpose:</strong> Verify that individual modules and functions work correctly in isolation.</p>
+  <table>
+    <tr><th>Test ID</th><th>Module</th><th>Test Case</th><th>Expected Result</th></tr>
+    <tr><td>UT-01</td><td>Athlete Registration</td><td>Register with valid email, password, and role</td><td>Account created; role assigned correctly</td></tr>
+    <tr><td>UT-02</td><td>Athlete Registration</td><td>Register with duplicate email</td><td>Error: "Email already exists"</td></tr>
+    <tr><td>UT-03</td><td>Authentication</td><td>Login with correct credentials</td><td>JWT token returned; dashboard redirect</td></tr>
+    <tr><td>UT-04</td><td>Authentication</td><td>Login with incorrect password</td><td>Error: "Invalid credentials"</td></tr>
+    <tr><td>UT-05</td><td>Recovery Log</td><td>Submit morning check-in with all fields</td><td>Record saved to RecoveryLogs table</td></tr>
+    <tr><td>UT-06</td><td>Training Log</td><td>Submit training log with intensity out of range (0 or 11)</td><td>Validation error returned</td></tr>
+    <tr><td>UT-07</td><td>Wearable Sync</td><td>Sync T70 data via Bluetooth API</td><td>WearableData record created for athlete</td></tr>
+    <tr><td>UT-08</td><td>ML Prediction</td><td>Trigger prediction with complete training + recovery data</td><td>Risk score (0–100) and risk level returned</td></tr>
+    <tr><td>UT-09</td><td>ML Prediction</td><td>Trigger prediction with missing data fields</td><td>Error or default risk level returned</td></tr>
+    <tr><td>UT-10</td><td>Diet Plan</td><td>Nutritionist creates diet plan for registered athlete</td><td>DietPlans record saved correctly</td></tr>
+    <tr><td>UT-11</td><td>Settings — Profile Update</td><td>Authenticated user updates their name and email</td><td>Profile updated in database; updated values returned</td></tr>
+    <tr><td>UT-12</td><td>Settings — Password Change</td><td>Authenticated user submits correct current password and new password</td><td>Password hash updated; old password no longer valid</td></tr>
+    <tr><td>UT-13</td><td>Settings — Password Change</td><td>Authenticated user submits incorrect current password</td><td>Error: "Current password is incorrect"</td></tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 3: INTEGRATION TESTING -->
+  <h1>3. Integration Testing</h1>
+  <p><strong>Purpose:</strong> Ensure that modules interact correctly and data flows seamlessly between components.</p>
+  <table>
+    <tr><th>Test ID</th><th>Integration Point</th><th>Test Case</th><th>Expected Result</th></tr>
+    <tr><td>IT-01</td><td>Athlete → DB → Dashboard</td><td>Athlete submits recovery log; dashboard updates</td><td>Dashboard reflects new recovery data immediately</td></tr>
+    <tr><td>IT-02</td><td>Wearable → DB → Dashboard</td><td>T70 sync completes; wearable data appears on dashboard</td><td>Heart rate, sleep, steps visible on athlete dashboard</td></tr>
+    <tr><td>IT-03</td><td>DB → ML → Dashboard</td><td>Training + recovery data triggers ML prediction</td><td>Injury risk score updates on athlete dashboard</td></tr>
+    <tr><td>IT-04</td><td>Athlete → Coach Dashboard</td><td>Athlete logs training; coach dashboard reflects update</td><td>Coach sees updated performance data for that athlete</td></tr>
+    <tr><td>IT-05</td><td>Athlete → Nutritionist Dashboard</td><td>Athlete logs nutrition; nutritionist dashboard reflects update</td><td>Nutritionist sees updated nutrition log for that athlete</td></tr>
+    <tr><td>IT-06</td><td>RBAC → Dashboard Access</td><td>Coach attempts to access an athlete not under their sponsorship</td><td>Access denied; 403 Forbidden response</td></tr>
+    <tr><td>IT-07</td><td>RBAC → Dashboard Access</td><td>Nutritionist attempts to access an unregistered athlete</td><td>Access denied; 403 Forbidden response</td></tr>
+    <tr><td>IT-08</td><td>Settings → DB → Auth</td><td>User updates profile name; subsequent JWT still reflects correct identity</td><td>Profile name updated in DB; dashboard displays new name</td></tr>
+    <tr><td>IT-09</td><td>Settings → DB → Auth</td><td>User changes password; attempts login with old password</td><td>Old password rejected; new password accepted</td></tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 4: SYSTEM TESTING -->
+  <h1>4. System Testing</h1>
+  <p><strong>Purpose:</strong> Validate the complete system against all functional and non-functional requirements.</p>
+  <table>
+    <tr><th>Test ID</th><th>Requirement</th><th>Test Case</th><th>Expected Result</th></tr>
+    <tr><td>ST-01</td><td>FR-01 to FR-11</td><td>End-to-end flow: Athlete registers → logs data → ML predicts → coach views → user updates settings</td><td>All steps complete without errors</td></tr>
+    <tr><td>ST-02</td><td>NFR-01 (Performance)</td><td>Load athlete dashboard with 30 days of data</td><td>Page loads in under 2 seconds</td></tr>
+    <tr><td>ST-03</td><td>NFR-02 (Scalability)</td><td>Simulate 100 concurrent users accessing dashboards</td><td>No performance degradation; all requests served</td></tr>
+    <tr><td>ST-04</td><td>NFR-03 (Security)</td><td>Attempt to access API endpoints without JWT token</td><td>401 Unauthorized response for all protected endpoints</td></tr>
+    <tr><td>ST-05</td><td>NFR-06 (Data Integrity)</td><td>Submit training log with invalid data types</td><td>Server-side validation rejects invalid input</td></tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 5: USER ACCEPTANCE TESTING -->
+  <h1>5. User Acceptance Testing (UAT)</h1>
+  <p><strong>Purpose:</strong> Confirm the system meets the expectations and needs of real users.</p>
+  <h2>5.1 UAT Participants</h2>
+  <ul>
+    <li>2–3 Athletes (test morning check-in, training log, wearable sync, injury risk score)</li>
+    <li>1–2 Coaches (test athlete list, performance overview, injury alerts)</li>
+    <li>1 Nutritionist (test nutrition logs, diet plan creation, performance-nutrition chart)</li>
+  </ul>
+  <h2>5.2 UAT Scenarios</h2>
+  <table>
+    <tr><th>Scenario</th><th>User</th><th>Steps</th><th>Success Criteria</th></tr>
+    <tr>
+      <td>Morning Check-In</td>
+      <td>Athlete</td>
+      <td>Log sleep hours, soreness, mood; view updated dashboard</td>
+      <td>Data saved; dashboard reflects inputs within 2 seconds</td>
+    </tr>
+    <tr>
+      <td>Wearable Sync</td>
+      <td>Athlete</td>
+      <td>Connect T70 via Bluetooth; trigger sync; view data on dashboard</td>
+      <td>Heart rate, sleep, steps appear on dashboard after sync</td>
+    </tr>
+    <tr>
+      <td>Injury Risk Review</td>
+      <td>Athlete</td>
+      <td>View injury risk gauge after logging data</td>
+      <td>Risk score and level displayed clearly and accurately</td>
+    </tr>
+    <tr>
+      <td>Athlete Monitoring</td>
+      <td>Coach</td>
+      <td>View athlete list; open individual athlete dashboard; review alerts</td>
+      <td>Only sponsored athletes visible; data accurate and up to date</td>
+    </tr>
+    <tr>
+      <td>Diet Plan Creation</td>
+      <td>Nutritionist</td>
+      <td>Open athlete nutrition dashboard; create and save diet plan</td>
+      <td>Plan saved and visible on athlete's profile</td>
+    </tr>
+    <tr>
+      <td>Settings Update</td>
+      <td>All Roles</td>
+      <td>Navigate to Settings; update name and email; change password</td>
+      <td>Profile saved successfully; password change takes effect immediately</td>
+    </tr>
+  </table>
+  <p>UAT participants will complete a structured feedback questionnaire rating usability (1–5), data accuracy, and overall satisfaction. Results will be used to refine the UI and fix any identified issues before final submission.</p>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 6: PERFORMANCE TESTING -->
+  <h1>6. Performance Testing</h1>
+  <table>
+    <tr><th>Test</th><th>Method</th><th>Target</th></tr>
+    <tr><td>Dashboard Load Time</td><td>Measure load time with 30 days of athlete data</td><td>Under 2 seconds</td></tr>
+    <tr><td>Wearable Sync Latency</td><td>Measure time from Bluetooth sync trigger to data appearing on dashboard</td><td>Under 5 seconds</td></tr>
+    <tr><td>ML Prediction Response</td><td>Measure time from prediction request to risk score display</td><td>Under 3 seconds</td></tr>
+    <tr><td>Concurrent Users</td><td>Simulate 100 simultaneous users with load testing tool</td><td>No errors; response time under 3 seconds</td></tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 7: SECURITY TESTING -->
+  <h1>7. Security Testing</h1>
+  <table>
+    <tr><th>Test</th><th>Method</th><th>Expected Result</th></tr>
+    <tr><td>Unauthorized API Access</td><td>Call protected endpoints without JWT token</td><td>401 Unauthorized response</td></tr>
+    <tr><td>Cross-Role Access</td><td>Use coach token to access nutritionist endpoints</td><td>403 Forbidden response</td></tr>
+    <tr><td>SQL Injection</td><td>Submit malicious SQL strings in input fields</td><td>Input sanitized; no database error or data leak</td></tr>
+    <tr><td>Password Storage</td><td>Inspect database for stored passwords</td><td>Only bcrypt hashes stored; no plaintext passwords</td></tr>
+    <tr><td>JWT Expiry</td><td>Use expired JWT token to access dashboard</td><td>401 Unauthorized; redirect to login</td></tr>
+  </table>
+
+  <hr class="section-divider" />
+
+  <!-- SECTION 8: EVALUATION METRICS -->
+  <h1>8. Evaluation Metrics</h1>
+
+  <div class="metric-box">
+    <div class="metric-title">ML Prediction Accuracy</div>
+    <p>Injury risk predictions compared against known outcomes from test datasets. Target: ≥ 80% accuracy.</p>
+  </div>
+  <div class="metric-box">
+    <div class="metric-title">Usability Score</div>
+    <p>Average UAT satisfaction rating across all user roles. Target: ≥ 4.0 / 5.0.</p>
+  </div>
+  <div class="metric-box">
+    <div class="metric-title">System Performance</div>
+    <p>Average dashboard load time and ML response time across all test scenarios. Target: Under 2 seconds and 3 seconds respectively.</p>
+  </div>
+  <div class="metric-box">
+    <div class="metric-title">System Reliability</div>
+    <p>System uptime during testing period. Target: ≥ 99%.</p>
+  </div>
+  <div class="metric-box">
+    <div class="metric-title">Security Compliance</div>
+    <p>Zero critical vulnerabilities detected across all security test cases.</p>
+  </div>
+
+  <div class="footer">
+    AfyaNexus &mdash; Testing &amp; Evaluation Plan &mdash; Version 1.0 &mdash; Confidential
+  </div>
+
+</div>
+</body>
+</html>

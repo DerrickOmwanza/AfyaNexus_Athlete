@@ -1,0 +1,125 @@
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import {
+  LayoutDashboard, Activity, Moon, BarChart2,
+  Users, Settings, LogOut, Utensils, Apple, Watch,
+} from "lucide-react";
+
+const NAV = {
+  athlete: [
+    { href: "/dashboard/athlete",               icon: LayoutDashboard, label: "Dashboard" },
+    { href: "/dashboard/athlete/training-log",  icon: Activity,        label: "Training Log" },
+    { href: "/dashboard/athlete/recovery-log",  icon: Moon,            label: "Recovery Log" },
+    { href: "/dashboard/athlete/nutrition-log", icon: Apple,           label: "Nutrition Log" },
+    { href: "/dashboard/athlete/wearable",      icon: Watch,           label: "Wearable Sync" },
+    { href: "/dashboard/athlete/reports",       icon: BarChart2,       label: "Reports" },
+  ],
+  coach: [
+    { href: "/dashboard/coach",          icon: LayoutDashboard, label: "Dashboard" },
+    { href: "/dashboard/coach/athletes", icon: Users,           label: "My Athletes" },
+  ],
+  nutritionist: [
+    { href: "/dashboard/nutritionist",            icon: LayoutDashboard, label: "Dashboard" },
+    { href: "/dashboard/nutritionist/athletes",   icon: Users,           label: "My Athletes" },
+    { href: "/dashboard/nutritionist/diet-plans", icon: Utensils,        label: "Diet Plans" },
+  ],
+};
+
+const ROLE_COLORS = {
+  athlete:      "bg-brand-blue-light text-brand-blue",
+  coach:        "bg-brand-green-light text-brand-green",
+  nutritionist: "bg-brand-orange-light text-brand-orange",
+};
+
+export default function Sidebar() {
+  const { user, logout } = useAuth();
+  const pathname = usePathname();
+
+  if (!user) return null;
+  const links = NAV[user.role as keyof typeof NAV] ?? [];
+  const initials = user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
+
+  return (
+    <aside className="w-60 min-h-screen bg-brand-dark flex flex-col border-r border-white/5">
+
+      {/* ── Brand ───────────────────────────────────────── */}
+      <div className="px-5 py-6 border-b border-white/8">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-brand-blue flex items-center justify-center">
+            <span className="text-white font-heading font-bold text-sm">AN</span>
+          </div>
+          <div>
+            <h1 className="text-white font-heading font-bold text-base tracking-wide leading-none">AfyaNexus</h1>
+            <p className="text-gray-400 text-xs mt-0.5 capitalize">{user.role} Portal</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── User card ───────────────────────────────────── */}
+      <div className="px-4 py-4 border-b border-white/8">
+        <div className="flex items-center gap-3 bg-white/5 rounded-xl px-3 py-2.5">
+          <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 shrink-0">
+            {user.avatar_url ? (
+              <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full bg-brand-blue flex items-center justify-center text-white text-xs font-bold">
+                {initials}
+              </div>
+            )}
+          </div>
+          <div className="min-w-0">
+            <p className="text-white text-xs font-semibold truncate">{user.name}</p>
+            <p className="text-gray-400 text-xs truncate">{user.email}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Nav links ───────────────────────────────────── */}
+      <nav className="flex-1 px-3 py-4 space-y-0.5">
+        <p className="text-gray-500 text-xs font-semibold uppercase tracking-widest px-3 mb-2">Menu</p>
+        {links.map(({ href, icon: Icon, label }) => {
+          const active = pathname === href || (href !== `/dashboard/${user.role}` && pathname.startsWith(href));
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group ${
+                active
+                  ? "bg-brand-blue text-white shadow-sm"
+                  : "text-gray-400 hover:bg-white/8 hover:text-white"
+              }`}
+            >
+              <Icon size={15} className={active ? "text-white" : "text-gray-500 group-hover:text-white transition-colors"} />
+              {label}
+              {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-brand-green" />}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* ── Bottom ──────────────────────────────────────── */}
+      <div className="px-3 py-4 border-t border-white/8 space-y-0.5">
+        <Link
+          href={`/dashboard/${user.role}/settings`}
+          className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group ${
+            pathname.includes("/settings")
+              ? "bg-brand-blue text-white"
+              : "text-gray-400 hover:bg-white/8 hover:text-white"
+          }`}
+        >
+          <Settings size={15} className="text-gray-500 group-hover:text-white transition-colors" />
+          Settings
+        </Link>
+        <button
+          onClick={logout}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:bg-red-500/15 hover:text-red-400 transition-all group"
+        >
+          <LogOut size={15} className="group-hover:text-red-400 transition-colors" />
+          Sign Out
+        </button>
+      </div>
+    </aside>
+  );
+}
