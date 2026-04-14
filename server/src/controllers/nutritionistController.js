@@ -25,13 +25,13 @@ const getMyAthletes = async (req, res) => {
   ]);
 
   // Keep only the latest prediction per athlete
-  const latestPredMap: Record<number, { risk_score: number; risk_level: string }> = {};
+  const latestPredMap = {};
   for (const p of (predictions ?? [])) {
     if (!latestPredMap[p.athlete_id]) latestPredMap[p.athlete_id] = p;
   }
 
   // Count diet plans per athlete
-  const planCountMap: Record<number, number> = {};
+  const planCountMap = {};
   for (const p of (dietPlans ?? [])) {
     planCountMap[p.athlete_id] = (planCountMap[p.athlete_id] ?? 0) + 1;
   }

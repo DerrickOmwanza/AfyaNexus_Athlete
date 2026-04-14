@@ -58,3 +58,6 @@ client/patch-nextjs.js
 client/test-swc.js
 client/AGENTS.md
 client/CLAUDE.md
+
+# OpenMemory - IDE/Assistant specific rules
+.cursor\rules\openmemory.mdc
