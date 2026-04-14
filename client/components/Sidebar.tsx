@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useEffect } from "react";
 import {
   LayoutDashboard, Activity, Moon, BarChart2,
   Users, Settings, LogOut, Utensils, Apple, Watch,
@@ -36,13 +37,20 @@ const ROLE_COLORS = {
 export default function Sidebar() {
   const { user, logout } = useAuth();
   const pathname = usePathname();
+  const router   = useRouter();
 
   if (!user) return null;
-  const links = NAV[user.role as keyof typeof NAV] ?? [];
+  const links    = NAV[user.role as keyof typeof NAV] ?? [];
   const initials = user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
 
+  // Prefetch all nav routes on mount so clicks are instant
+  useEffect(() => {
+    links.forEach(({ href }) => router.prefetch(href));
+    router.prefetch(`/dashboard/${user.role}/settings`);
+  }, [user.role]);
+
   return (
-    <aside className="w-60 min-h-screen bg-brand-dark flex flex-col border-r border-white/5">
+    <aside className="w-60 h-screen sticky top-0 bg-brand-dark flex flex-col border-r border-white/5 shrink-0 overflow-y-auto">
 
       {/* ── Brand ───────────────────────────────────────── */}
       <div className="px-5 py-6 border-b border-white/8">

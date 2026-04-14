@@ -5,7 +5,17 @@ import StatCard from "@/components/ui/StatCard";
 import InjuryRiskGauge from "@/components/ui/InjuryRiskGauge";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import Link from "next/link";
-import { Moon, Activity, Apple, Watch, AlertTriangle, CheckCircle, ArrowRight } from "lucide-react";
+import { Moon, Activity, Apple, Watch, AlertTriangle, CheckCircle, ArrowRight, MessageSquare, User } from "lucide-react";
+
+interface Comment {
+  id: number;
+  author_name: string;
+  author_role: string;
+  message: string;
+  context: string;
+  created_at: string;
+  read_at: string | null;
+}
 
 interface DashboardData {
   athlete: { name: string; specialization: string };
@@ -48,17 +58,65 @@ function NextActionBanner({ recovery, training }: { recovery: boolean; training:
   );
 }
 
+function MessageRow({ c }: { c: Comment }) {
+  return (
+    <div className={`px-5 py-3.5 transition-colors ${
+      !c.read_at ? "bg-blue-50/50" : "hover:bg-gray-50/50"
+    }`}>
+      <div className="flex items-start gap-3">
+        <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
+          c.author_role === "coach" ? "bg-brand-blue-light" : "bg-brand-orange-light"
+        }`}>
+          <User size={11} className={c.author_role === "coach" ? "text-brand-blue" : "text-brand-orange"} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 flex-wrap mb-1">
+            <span className="text-xs font-semibold text-brand-dark">{c.author_name}</span>
+            <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium capitalize ${
+              c.author_role === "coach"
+                ? "bg-brand-blue-light text-brand-blue"
+                : "bg-brand-orange-light text-brand-orange"
+            }`}>{c.author_role}</span>
+            <span className="text-xs text-brand-muted ml-auto">
+              {new Date(c.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+            </span>
+          </div>
+          <p className="text-sm text-brand-dark leading-relaxed whitespace-pre-wrap">{c.message}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function AthleteDashboard() {
-  const [data, setData]       = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState("");
+  const [data, setData]         = useState<DashboardData | null>(null);
+  const [comments, setComments]   = useState<Comment[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [inboxOpen, setInboxOpen] = useState(false);
+  const [loading, setLoading]     = useState(true);
+  const [error, setError]         = useState("");
 
   useEffect(() => {
-    api.get("/athlete/dashboard")
-      .then((res) => setData(res.data))
+    Promise.all([
+      api.get("/athlete/dashboard"),
+      api.get("/athlete/comments"),
+    ])
+      .then(([dashRes, commentsRes]) => {
+        setData(dashRes.data);
+        const c = commentsRes.data.comments ?? [];
+        setComments(c);
+        setUnreadCount(c.filter((m: Comment) => !m.read_at).length);
+      })
       .catch(() => setError("Failed to load dashboard data."))
       .finally(() => setLoading(false));
   }, []);
+
+  const handleOpenInbox = () => {
+    setInboxOpen(true);
+    if (unreadCount > 0) {
+      api.post("/athlete/comments/read").then(() => setUnreadCount(0)).catch(() => {});
+    }
+  };
 
   if (loading) return (
     <div className="space-y-4">
@@ -257,6 +315,76 @@ export default function AthleteDashboard() {
           </div>
         </div>
       )}
+
+      {/* ── Messages inbox ───────────────────────────────── */}
+      <div className="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
+
+        {/* Header — always visible, click to toggle */}
+        <button
+          onClick={handleOpenInbox}
+          className="w-full px-5 py-4 flex items-center gap-2.5 hover:bg-gray-50/60 transition-colors"
+        >
+          <div className="relative">
+            <MessageSquare size={16} className="text-brand-blue" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
+          </div>
+          <p className="text-sm font-heading font-semibold text-brand-dark">Messages from Coach &amp; Nutritionist</p>
+          <div className="ml-auto flex items-center gap-2">
+            {unreadCount > 0 && (
+              <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                {unreadCount} new
+              </span>
+            )}
+            <span className="text-brand-muted text-xs">{inboxOpen ? "▲" : "▼"}</span>
+          </div>
+        </button>
+
+        {/* Expandable inbox body */}
+        {inboxOpen && (
+          <div className="border-t border-gray-100">
+            {comments.length === 0 ? (
+              <div className="px-5 py-8 text-center">
+                <MessageSquare size={28} className="text-gray-200 mx-auto mb-2" />
+                <p className="text-sm text-brand-muted">No messages yet from your coach or nutritionist.</p>
+              </div>
+            ) : (
+              <>
+                {/* Unread section */}
+                {comments.filter(c => !c.read_at).length > 0 && (
+                  <div>
+                    <p className="px-5 py-2 text-xs font-semibold text-brand-blue uppercase tracking-widest bg-brand-blue-light/40">
+                      New Messages
+                    </p>
+                    <div className="divide-y divide-blue-50 max-h-52 overflow-y-auto">
+                      {comments.filter(c => !c.read_at).map((c) => (
+                        <MessageRow key={c.id} c={c} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Read section */}
+                {comments.filter(c => c.read_at).length > 0 && (
+                  <div>
+                    <p className="px-5 py-2 text-xs font-semibold text-brand-muted uppercase tracking-widest bg-gray-50">
+                      Earlier
+                    </p>
+                    <div className="divide-y divide-gray-50 max-h-52 overflow-y-auto">
+                      {comments.filter(c => c.read_at).map((c) => (
+                        <MessageRow key={c.id} c={c} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
