@@ -47,11 +47,13 @@ export default function CoachDashboard() {
     <div className="space-y-5 animate-fade-in-up">
 
       {/* ── Header ──────────────────────────────────────── */}
-      <div>
-        <h2 className="text-xl font-heading font-bold text-brand-dark">
-          {`${new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 17 ? "Good afternoon" : "Good evening"}, Coach ${user?.name?.split(" ")[0] ?? ""}!`}
-        </h2>
-        <p className="text-sm text-brand-muted mt-0.5">Monitor your athletes&apos; performance and injury risk.</p>
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+        <div>
+          <h2 className="text-xl font-heading font-bold text-brand-dark">
+            {`${new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 17 ? "Good afternoon" : "Good evening"}, Coach ${user?.name?.split(" ")[0] ?? ""}!`}
+          </h2>
+          <p className="text-sm text-brand-muted mt-0.5">Monitor your athletes&apos; performance and injury risk.</p>
+        </div>
       </div>
 
       {/* ── Alert banner ────────────────────────────────── */}
@@ -76,7 +78,7 @@ export default function CoachDashboard() {
       )}
 
       {/* ── Summary cards ───────────────────────────────── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: "Total Athletes", value: athletes.length, accent: "border-brand-blue",   text: "text-brand-blue",   icon: Users,        bg: "bg-brand-blue-light" },
           { label: "High Risk",      value: high.length,     accent: "border-red-500",       text: "text-red-500",      icon: AlertTriangle, bg: "bg-red-50" },

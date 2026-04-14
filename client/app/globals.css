@@ -140,5 +140,12 @@ h1, h2, h3, h4 {
 }
 .dark-input option { background: #0D1F3C; color: #ffffff; }
 
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+.animate-slide-in-left { animation: slideInLeft 0.25s ease both; }
+
 /* ── Page transition ───────────────────────────────────── */
 main { animation: fadeInUp 0.35s ease both; }

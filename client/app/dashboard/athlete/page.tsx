@@ -152,7 +152,7 @@ export default function AthleteDashboard() {
     <div className="space-y-5 animate-fade-in-up">
 
       {/* ── Header ──────────────────────────────────────── */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div>
           <h2 className="text-xl font-heading font-bold text-brand-dark">
             Good {new Date().getHours() < 12 ? "morning" : new Date().getHours() < 17 ? "afternoon" : "evening"}, {data.athlete.name.split(" ")[0]} 👋
@@ -162,7 +162,7 @@ export default function AthleteDashboard() {
             {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Link href="/dashboard/athlete/recovery-log" className="flex items-center gap-1.5 px-4 py-2 bg-brand-blue text-white text-xs font-semibold rounded-xl hover:bg-blue-900 transition-all hover:shadow-md">
             <Moon size={13} /> Morning Check-In
           </Link>
@@ -197,7 +197,7 @@ export default function AthleteDashboard() {
       })()}
 
       {/* ── Stat cards ──────────────────────────────────── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           label="Sleep Last Night"
           value={latestRecovery?.sleep_hours ? `${latestRecovery.sleep_hours}h` : "—"}

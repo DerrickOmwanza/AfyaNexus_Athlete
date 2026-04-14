@@ -488,13 +488,13 @@ export default function ReportAssistant({
           </div>
 
           {/* Input */}
-          <div className="px-4 pb-3 flex items-center gap-2">
+          <div className="px-3 pb-3 flex items-center gap-2">
             <input
               type="text" value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") handleAsk(input); }}
               placeholder="Ask a question..."
-              className="flex-1 text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-blue/30 bg-gray-50"
+              className="flex-1 min-w-0 text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-blue/30 bg-gray-50"
             />
             {hasSR && (
               <button onClick={listening ? stopListening : startListening}

@@ -1,8 +1,9 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
+import { useSidebar } from "@/context/SidebarContext";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Bell, Watch, Plus, ChevronRight } from "lucide-react";
+import { Bell, Watch, Plus, ChevronRight, Menu } from "lucide-react";
 
 const BREADCRUMBS: Record<string, string> = {
   "/dashboard/athlete":               "Dashboard",
@@ -36,6 +37,8 @@ export default function TopBar() {
   const { user } = useAuth();
   const pathname = usePathname();
 
+  const { toggle } = useSidebar();
+
   if (!user) return null;
 
   const initials    = user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
@@ -44,13 +47,24 @@ export default function TopBar() {
   const quickActions = QUICK_ACTIONS[user.role as keyof typeof QUICK_ACTIONS] ?? [];
 
   return (
-    <header className="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-6 shrink-0">
+    <header className="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-4 md:px-6 shrink-0">
 
-      {/* ── Breadcrumb ──────────────────────────────────── */}
-      <div className="flex items-center gap-1.5 text-sm">
-        <span className="text-brand-muted">{portalLabel}</span>
-        <ChevronRight size={13} className="text-gray-300" />
-        <span className="font-semibold text-brand-dark">{currentPage}</span>
+      {/* ── Left: hamburger (mobile) + breadcrumb ─────── */}
+      <div className="flex items-center gap-3">
+        {/* Hamburger — mobile only */}
+        <button
+          onClick={toggle}
+          className="lg:hidden p-2 rounded-lg text-brand-muted hover:bg-gray-100 hover:text-brand-blue transition-all"
+          aria-label="Open menu"
+        >
+          <Menu size={18} />
+        </button>
+
+        <div className="flex items-center gap-1.5 text-sm">
+          <span className="hidden sm:inline text-brand-muted">{portalLabel}</span>
+          <ChevronRight size={13} className="hidden sm:inline text-gray-300" />
+          <span className="font-semibold text-brand-dark">{currentPage}</span>
+        </div>
       </div>
 
       {/* ── Right actions ───────────────────────────────── */}

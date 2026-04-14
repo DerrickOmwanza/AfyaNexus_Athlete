@@ -2,10 +2,11 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useSidebar } from "@/context/SidebarContext";
 import { useEffect } from "react";
 import {
   LayoutDashboard, Activity, Moon, BarChart2,
-  Users, Settings, LogOut, Utensils, Apple, Watch,
+  Users, Settings, LogOut, Utensils, Apple, Watch, X,
 } from "lucide-react";
 
 const NAV = {
@@ -28,34 +29,40 @@ const NAV = {
   ],
 };
 
-const ROLE_COLORS = {
-  athlete:      "bg-brand-blue-light text-brand-blue",
-  coach:        "bg-brand-green-light text-brand-green",
-  nutritionist: "bg-brand-orange-light text-brand-orange",
-};
-
 export default function Sidebar() {
   const { user, logout } = useAuth();
+  const { open, close }  = useSidebar();
   const pathname = usePathname();
   const router   = useRouter();
 
   if (!user) return null;
+
   const links    = NAV[user.role as keyof typeof NAV] ?? [];
   const initials = user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
 
-  // Prefetch all nav routes on mount so clicks are instant
+  // Prefetch all nav routes on mount
   useEffect(() => {
     links.forEach(({ href }) => router.prefetch(href));
     router.prefetch(`/dashboard/${user.role}/settings`);
   }, [user.role]);
 
-  return (
-    <aside className="w-60 h-screen sticky top-0 bg-brand-dark flex flex-col border-r border-white/5 shrink-0 overflow-y-auto">
+  // Close drawer on route change
+  useEffect(() => { close(); }, [pathname]);
 
-      {/* ── Brand ───────────────────────────────────────── */}
-      <div className="px-5 py-6 border-b border-white/8">
+  // Close drawer on Escape key
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
+
+  const sidebarContent = (
+    <aside className="w-60 h-full bg-brand-dark flex flex-col border-r border-white/5 overflow-y-auto">
+
+      {/* ── Brand ─────────────────────────────────────── */}
+      <div className="px-5 py-6 border-b border-white/8 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-brand-blue flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-brand-blue flex items-center justify-center shrink-0">
             <span className="text-white font-heading font-bold text-sm">AN</span>
           </div>
           <div>
@@ -63,9 +70,13 @@ export default function Sidebar() {
             <p className="text-gray-400 text-xs mt-0.5 capitalize">{user.role} Portal</p>
           </div>
         </div>
+        {/* Close button — mobile only */}
+        <button onClick={close} className="lg:hidden text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors">
+          <X size={18} />
+        </button>
       </div>
 
-      {/* ── User card ───────────────────────────────────── */}
+      {/* ── User card ─────────────────────────────────── */}
       <div className="px-4 py-4 border-b border-white/8">
         <div className="flex items-center gap-3 bg-white/5 rounded-xl px-3 py-2.5">
           <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 shrink-0">
@@ -84,7 +95,7 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* ── Nav links ───────────────────────────────────── */}
+      {/* ── Nav links ─────────────────────────────────── */}
       <nav className="flex-1 px-3 py-4 space-y-0.5">
         <p className="text-gray-500 text-xs font-semibold uppercase tracking-widest px-3 mb-2">Menu</p>
         {links.map(({ href, icon: Icon, label }) => {
@@ -107,7 +118,7 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* ── Bottom ──────────────────────────────────────── */}
+      {/* ── Bottom ────────────────────────────────────── */}
       <div className="px-3 py-4 border-t border-white/8 space-y-0.5">
         <Link
           href={`/dashboard/${user.role}/settings`}
@@ -129,5 +140,29 @@ export default function Sidebar() {
         </button>
       </div>
     </aside>
+  );
+
+  return (
+    <>
+      {/* Desktop: always visible */}
+      <div className="hidden lg:flex h-screen sticky top-0 shrink-0">
+        {sidebarContent}
+      </div>
+
+      {/* Mobile: drawer overlay */}
+      {open && (
+        <div className="lg:hidden fixed inset-0 z-50 flex">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={close}
+          />
+          {/* Drawer panel */}
+          <div className="relative z-10 h-full animate-slide-in-left">
+            {sidebarContent}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

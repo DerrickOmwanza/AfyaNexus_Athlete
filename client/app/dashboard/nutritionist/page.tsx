@@ -44,7 +44,7 @@ export default function NutritionistDashboard() {
     <div className="space-y-5 animate-fade-in-up">
 
       {/* ── Header ──────────────────────────────────────── */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div>
           <h2 className="text-xl font-heading font-bold text-brand-dark">
             {`${new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 17 ? "Good afternoon" : "Good evening"}, ${user?.name?.split(" ")[0] ?? ""}!`}

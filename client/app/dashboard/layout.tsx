@@ -5,6 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import Sidebar from "@/components/Sidebar";
 import TopBar from "@/components/TopBar";
 import api from "@/lib/api";
+import { SidebarProvider } from "@/context/SidebarContext";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, setUserProfile } = useAuth();
@@ -61,22 +62,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-brand-gray">
-      <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <TopBar />
-        <main className="flex-1 overflow-y-auto relative">
-          {pageLoading && (
-            <div className="absolute inset-0 z-10 flex items-start justify-center pt-20 bg-brand-gray/60 backdrop-blur-sm">
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-8 h-8 border-2 border-brand-blue/20 border-t-brand-blue rounded-full animate-spin" />
-                <p className="text-xs text-brand-muted font-medium">Loading...</p>
+    <SidebarProvider>
+      <div className="flex h-screen overflow-hidden bg-brand-gray">
+        <Sidebar />
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+          <TopBar />
+          <main className="flex-1 overflow-y-auto relative">
+            {pageLoading && (
+              <div className="absolute inset-0 z-10 flex items-start justify-center pt-20 bg-brand-gray/60 backdrop-blur-sm">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-8 h-8 border-2 border-brand-blue/20 border-t-brand-blue rounded-full animate-spin" />
+                  <p className="text-xs text-brand-muted font-medium">Loading...</p>
+                </div>
               </div>
-            </div>
-          )}
-          <div className="p-6">{children}</div>
-        </main>
+            )}
+            <div className="p-4 md:p-6">{children}</div>
+          </main>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
