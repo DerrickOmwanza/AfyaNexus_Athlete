@@ -10,7 +10,16 @@ const nutritionistRoutes = require('./routes/nutritionist');
 
 const app = express();
 
-app.use(cors({ origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http://localhost:3003', 'http://localhost:4000'], credentials: true }));
+const ALLOWED_ORIGINS = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:3002',
+  'http://localhost:3003',
+  'http://localhost:4000',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
+app.use(cors({ origin: ALLOWED_ORIGINS, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
