@@ -3,15 +3,25 @@ import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import Link from "next/link";
 import { Users, Utensils, ArrowRight, CheckCircle, ClipboardList } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 interface Athlete {
   id: number;
   name: string;
   email: string;
   specialization: string;
+  latest_prediction: { risk_score: number; risk_level: string } | null;
+  diet_plan_count: number;
 }
 
+const riskBadge = (level: string | undefined) =>
+  level === "High"   ? "bg-red-100 text-red-600 border border-red-200" :
+  level === "Medium" ? "bg-orange-100 text-orange-600 border border-orange-200" :
+  level === "Low"    ? "bg-green-100 text-green-600 border border-green-200" :
+                       "bg-gray-100 text-gray-500 border border-gray-200";
+
 export default function NutritionistDashboard() {
+  const { user } = useAuth();
   const [athletes, setAthletes] = useState<Athlete[]>([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState("");
@@ -36,7 +46,9 @@ export default function NutritionistDashboard() {
       {/* ── Header ──────────────────────────────────────── */}
       <div className="flex items-start justify-between">
         <div>
-          <h2 className="text-xl font-heading font-bold text-brand-dark">Nutritionist Dashboard</h2>
+          <h2 className="text-xl font-heading font-bold text-brand-dark">
+            {`${new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 17 ? "Good afternoon" : "Good evening"}, ${user?.name?.split(" ")[0] ?? ""}!`}
+          </h2>
           <p className="text-sm text-brand-muted mt-0.5">Manage nutrition plans for your registered athletes.</p>
         </div>
         <Link
@@ -69,9 +81,9 @@ export default function NutritionistDashboard() {
       {/* ── Summary cards ───────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[
-          { label: "Registered Athletes", value: athletes.length, icon: Users,         color: "text-brand-green  bg-brand-green-light",  desc: "Under your care" },
-          { label: "Active Plans",         value: athletes.length, icon: Utensils,      color: "text-brand-blue   bg-brand-blue-light",   desc: "Diet plans created" },
-          { label: "Needs Review",         value: 0,               icon: ClipboardList, color: "text-brand-orange bg-brand-orange-light", desc: "Pending updates" },
+          { label: "Registered Athletes", value: athletes.length,                                          icon: Users,         color: "text-brand-green  bg-brand-green-light",  desc: "Under your care" },
+          { label: "Active Plans",         value: athletes.filter(a => a.diet_plan_count > 0).length,      icon: Utensils,      color: "text-brand-blue   bg-brand-blue-light",   desc: "Athletes with diet plans" },
+          { label: "Needs Review",         value: athletes.filter(a => a.diet_plan_count === 0).length,    icon: ClipboardList, color: "text-brand-orange bg-brand-orange-light", desc: "No diet plan yet" },
         ].map((c) => (
           <div key={c.label} className="bg-white rounded-2xl p-5 shadow-card border border-gray-100 card-hover">
             <div className="flex items-start justify-between mb-3">
@@ -107,7 +119,8 @@ export default function NutritionistDashboard() {
                 <tr className="text-left text-xs text-brand-muted border-b border-gray-50">
                   <th className="px-5 py-3 font-semibold">Athlete</th>
                   <th className="px-5 py-3 font-semibold">Specialization</th>
-                  <th className="px-5 py-3 font-semibold">Email</th>
+                  <th className="px-5 py-3 font-semibold">Risk Level</th>
+                  <th className="px-5 py-3 font-semibold">Diet Plans</th>
                   <th className="px-5 py-3 font-semibold"></th>
                 </tr>
               </thead>
@@ -123,7 +136,16 @@ export default function NutritionistDashboard() {
                       </div>
                     </td>
                     <td className="px-5 py-3 text-xs text-brand-muted">{a.specialization || "—"}</td>
-                    <td className="px-5 py-3 text-xs text-brand-muted">{a.email}</td>
+                    <td className="px-5 py-3">
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${riskBadge(a.latest_prediction?.risk_level)}`}>
+                        {a.latest_prediction?.risk_level ?? "No data"}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3">
+                      <span className={`text-xs font-semibold ${ a.diet_plan_count === 0 ? "text-brand-orange" : "text-brand-green" }`}>
+                        {a.diet_plan_count === 0 ? "None" : `${a.diet_plan_count} plan${a.diet_plan_count > 1 ? "s" : ""}`}
+                      </span>
+                    </td>
                     <td className="px-5 py-3">
                       <Link href={`/dashboard/nutritionist/athletes/${a.id}`} className="flex items-center gap-1 text-xs text-brand-blue font-semibold hover:underline">
                         View dashboard <ArrowRight size={11} />

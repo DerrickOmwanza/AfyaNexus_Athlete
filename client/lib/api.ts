@@ -2,9 +2,10 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true, // send httpOnly cookie on every request
 });
 
-// Attach JWT token to every request automatically
+// Attach JWT token to every request — header kept for backward compat during transition
 api.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("afyanexus_token");

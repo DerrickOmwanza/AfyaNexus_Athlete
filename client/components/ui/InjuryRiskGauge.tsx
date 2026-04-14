@@ -1,6 +1,7 @@
 interface InjuryRiskGaugeProps {
   score: number | null;
   level: string | null;
+  confidence?: { low: number; medium: number; high: number } | null;
 }
 
 const LEVEL_CONFIG = {
@@ -9,7 +10,7 @@ const LEVEL_CONFIG = {
   Low:    { color: "#10B981", bg: "bg-green-50",  border: "border-green-200",  label: "Low Risk",    tip: "You are in good shape. Maintain current training load." },
 };
 
-export default function InjuryRiskGauge({ score, level }: InjuryRiskGaugeProps) {
+export default function InjuryRiskGauge({ score, level, confidence }: InjuryRiskGaugeProps) {
   const safeScore = score ?? 0;
   const cfg = level ? LEVEL_CONFIG[level as keyof typeof LEVEL_CONFIG] : null;
   const color = cfg?.color ?? "#9CA3AF";
@@ -88,6 +89,22 @@ export default function InjuryRiskGauge({ score, level }: InjuryRiskGaugeProps) 
               <div className="flex justify-between text-xs text-gray-300 mt-1">
                 <span>0</span><span>50</span><span>100</span>
               </div>
+              {confidence && (
+                <div className="mt-3 pt-3 border-t border-gray-100">
+                  <p className="text-xs text-brand-muted font-semibold mb-1.5">ML Confidence</p>
+                  <div className="flex gap-2">
+                    {([
+                      { label: "Low",    val: confidence.low,    color: "bg-emerald-100 text-emerald-700" },
+                      { label: "Medium", val: confidence.medium, color: "bg-orange-100 text-orange-700" },
+                      { label: "High",   val: confidence.high,   color: "bg-red-100 text-red-700" },
+                    ] as const).map((c) => (
+                      <span key={c.label} className={`text-xs px-2 py-0.5 rounded-full font-semibold ${c.color}`}>
+                        {c.label} {c.val.toFixed(0)}%
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </>
           ) : (
             <p className="text-xs text-brand-muted leading-relaxed">

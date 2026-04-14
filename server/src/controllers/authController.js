@@ -87,7 +87,18 @@ const register = async (req, res) => {
     { expiresIn: process.env.JWT_EXPIRES_IN }
   );
 
-  res.status(201).json({
+  const isProduction = process.env.NODE_ENV === 'production';
+  const cookieOptions = {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? 'strict' : 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    path: '/',
+  };
+
+  res.status(201)
+    .cookie('afyanexus_token', token, cookieOptions)
+    .json({
     message: 'Registration successful.',
     token,
     user: {
@@ -132,7 +143,16 @@ const login = async (req, res) => {
     { expiresIn: process.env.JWT_EXPIRES_IN }
   );
 
-  res.json({
+  const isProduction = process.env.NODE_ENV === 'production';
+  const cookieOptions = {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? 'strict' : 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    path: '/',
+  };
+
+  res.cookie('afyanexus_token', token, cookieOptions).json({
     message: 'Login successful.',
     token,
     user: {
@@ -371,4 +391,8 @@ const uploadAvatar = async (req, res) => {
   res.json({ message: 'Avatar updated successfully.', user: { ...data, role } });
 };
 
-module.exports = { register, login, getProfile, updateProfile, updatePassword, getOnboardingOptions, forgotPassword, resetPassword, uploadAvatar };
+const logout = (_req, res) => {
+  res.clearCookie('afyanexus_token', { path: '/' }).json({ message: 'Logged out.' });
+};
+
+module.exports = { register, login, logout, getProfile, updateProfile, updatePassword, getOnboardingOptions, forgotPassword, resetPassword, uploadAvatar };

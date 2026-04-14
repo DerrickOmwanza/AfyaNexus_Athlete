@@ -14,7 +14,35 @@ const getMyAthletes = async (req, res) => {
 
   if (error) return res.status(500).json({ error: 'Failed to fetch athletes.' });
 
-  res.json({ athletes });
+  if (!athletes || athletes.length === 0) return res.json({ athletes: [] });
+
+  const athleteIds = athletes.map((a) => a.id);
+
+  // Fetch latest prediction and diet plan count per athlete
+  const [{ data: predictions }, { data: dietPlans }] = await Promise.all([
+    supabase.from('injury_predictions').select('athlete_id, risk_score, risk_level').in('athlete_id', athleteIds).order('created_at', { ascending: false }),
+    supabase.from('diet_plans').select('athlete_id').in('athlete_id', athleteIds),
+  ]);
+
+  // Keep only the latest prediction per athlete
+  const latestPredMap: Record<number, { risk_score: number; risk_level: string }> = {};
+  for (const p of (predictions ?? [])) {
+    if (!latestPredMap[p.athlete_id]) latestPredMap[p.athlete_id] = p;
+  }
+
+  // Count diet plans per athlete
+  const planCountMap: Record<number, number> = {};
+  for (const p of (dietPlans ?? [])) {
+    planCountMap[p.athlete_id] = (planCountMap[p.athlete_id] ?? 0) + 1;
+  }
+
+  const enriched = athletes.map((a) => ({
+    ...a,
+    latest_prediction: latestPredMap[a.id] ?? null,
+    diet_plan_count:   planCountMap[a.id]   ?? 0,
+  }));
+
+  res.json({ athletes: enriched });
 };
 
 const getAthleteDashboard = async (req, res) => {

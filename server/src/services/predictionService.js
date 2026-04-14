@@ -39,7 +39,7 @@ const triggerPrediction = async (athleteId) => {
       heart_rate_avg: wearable?.heart_rate_avg ?? 70,
     });
 
-    const { risk_score, risk_level } = response.data;
+    const { risk_score, risk_level, confidence } = response.data;
 
     await supabase.from('injury_predictions').insert({
       athlete_id: athleteId,
@@ -47,9 +47,12 @@ const triggerPrediction = async (athleteId) => {
       risk_score,
       risk_level,
       model_ver: 'v1.0-rule-based',
+      confidence_low:    confidence?.low    ?? null,
+      confidence_medium: confidence?.medium ?? null,
+      confidence_high:   confidence?.high   ?? null,
     });
 
-    return { triggered: true, risk_score, risk_level };
+    return { triggered: true, risk_score, risk_level, confidence: confidence ?? null };
   } catch {
     return { triggered: false };
   }

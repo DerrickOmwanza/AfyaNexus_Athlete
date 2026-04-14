@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import Link from "next/link";
 import { Users, AlertTriangle, TrendingUp, Shield, ArrowRight, Activity } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 interface AthleteWithPrediction {
   id: number;
@@ -19,6 +20,7 @@ const riskBadge = (level: string | undefined) =>
                        "bg-gray-100 text-brand-muted border border-gray-200";
 
 export default function CoachDashboard() {
+  const { user } = useAuth();
   const [athletes, setAthletes] = useState<AthleteWithPrediction[]>([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState("");
@@ -46,7 +48,9 @@ export default function CoachDashboard() {
 
       {/* ── Header ──────────────────────────────────────── */}
       <div>
-        <h2 className="text-xl font-heading font-bold text-brand-dark">Coach Dashboard</h2>
+        <h2 className="text-xl font-heading font-bold text-brand-dark">
+          {`${new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 17 ? "Good afternoon" : "Good evening"}, Coach ${user?.name?.split(" ")[0] ?? ""}!`}
+        </h2>
         <p className="text-sm text-brand-muted mt-0.5">Monitor your athletes&apos; performance and injury risk.</p>
       </div>
 

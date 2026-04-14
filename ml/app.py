@@ -122,6 +122,8 @@ def predict():
         return jsonify({'error': 'soreness_level must be between 1 and 10.'}), 400
     if not (1 <= intensity <= 10):
         return jsonify({'error': 'intensity must be between 1 and 10.'}), 400
+    if not (40 <= heart_rate_avg <= 220):
+        return jsonify({'error': 'heart_rate_avg must be between 40 and 220 bpm.'}), 400
 
     if USE_ML:
         risk_score, risk_level, probabilities = ml_predict(

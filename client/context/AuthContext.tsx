@@ -62,6 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
+    api.post("/auth/logout").catch(() => {});
     window.localStorage.removeItem("afyanexus_token");
     window.localStorage.removeItem("afyanexus_user");
     setUser(null);

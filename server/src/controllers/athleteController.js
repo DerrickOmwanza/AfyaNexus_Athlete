@@ -22,12 +22,14 @@ const getDashboard = async (req, res) => {
     { data: recentTraining },
     { data: latestPrediction },
     { data: wearable },
+    { data: latestNutrition },
   ] = await Promise.all([
     supabase.from('athletes').select('id, name, email, specialization').eq('id', athleteId).single(),
     supabase.from('recovery_logs').select('*').eq('athlete_id', athleteId).order('date', { ascending: false }).limit(7),
     supabase.from('training_logs').select('*').eq('athlete_id', athleteId).order('date', { ascending: false }).limit(7),
-    supabase.from('injury_predictions').select('*').eq('athlete_id', athleteId).order('created_at', { ascending: false }).limit(1).single(),
+    supabase.from('injury_predictions').select('risk_score, risk_level, confidence_low, confidence_medium, confidence_high').eq('athlete_id', athleteId).order('created_at', { ascending: false }).limit(1).single(),
     supabase.from('wearable_data').select('*').eq('athlete_id', athleteId).order('date', { ascending: false }).limit(1).single(),
+    supabase.from('nutrition_logs').select('date').eq('athlete_id', athleteId).order('date', { ascending: false }).limit(1).single(),
   ]);
 
   const normalizedRecovery = (recentRecovery ?? []).map(annotateRecoveryLog);
@@ -45,6 +47,7 @@ const getDashboard = async (req, res) => {
     latestPrediction,
     wearable: normalizedWearable,
     dataQuality,
+    latestNutrition: latestNutrition ?? null,
   });
 };
 

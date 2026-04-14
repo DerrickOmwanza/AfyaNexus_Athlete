@@ -6,6 +6,8 @@ import InjuryRiskGauge from "@/components/ui/InjuryRiskGauge";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import Link from "next/link";
 import { Moon, Activity, Apple, Watch, AlertTriangle, CheckCircle, ArrowRight, MessageSquare, User } from "lucide-react";
+import ReportAssistant from "@/components/ReportAssistant";
+import { useAuth } from "@/context/AuthContext";
 
 interface Comment {
   id: number;
@@ -21,8 +23,15 @@ interface DashboardData {
   athlete: { name: string; specialization: string };
   recentRecovery: Array<{ date: string; sleep_hours: number; soreness_level: number; mood: string }>;
   recentTraining: Array<{ date: string; workout_type: string; intensity: number; duration_min: number }>;
-  latestPrediction: { risk_score: number; risk_level: string } | null;
+  latestPrediction: {
+    risk_score: number;
+    risk_level: string;
+    confidence_low: number | null;
+    confidence_medium: number | null;
+    confidence_high: number | null;
+  } | null;
   wearable: { heart_rate_avg: number; sleep_duration: number; steps: number; synced_at: string } | null;
+  latestNutrition?: { date: string } | null;
 }
 
 function NextActionBanner({ recovery, training }: { recovery: boolean; training: boolean }) {
@@ -89,6 +98,7 @@ function MessageRow({ c }: { c: Comment }) {
 }
 
 export default function AthleteDashboard() {
+  const { user } = useAuth();
   const [data, setData]         = useState<DashboardData | null>(null);
   const [comments, setComments]   = useState<Comment[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -165,6 +175,27 @@ export default function AthleteDashboard() {
       {/* ── Next action banner ───────────────────────────── */}
       <NextActionBanner recovery={hasRecoveryToday} training={hasTrainingToday} />
 
+      {/* ── Nutrition warning ───────────────────────────── */}
+      {(() => {
+        const lastNutrDate = data.latestNutrition?.date;
+        if (!lastNutrDate) return (
+          <div className="alert-banner bg-brand-orange-light border border-orange-200 text-orange-800">
+            <Apple size={16} className="text-brand-orange shrink-0" />
+            <div className="flex-1"><span className="font-semibold">Nutrition: </span>No nutrition logs yet. Start tracking your daily intake.</div>
+            <Link href="/dashboard/athlete/nutrition-log" className="flex items-center gap-1 text-xs font-semibold text-brand-orange hover:underline shrink-0">Log Now <ArrowRight size={12} /></Link>
+          </div>
+        );
+        const daysSince = Math.floor((Date.now() - new Date(lastNutrDate).getTime()) / 86400000);
+        if (daysSince >= 2) return (
+          <div className="alert-banner bg-brand-orange-light border border-orange-200 text-orange-800">
+            <Apple size={16} className="text-brand-orange shrink-0" />
+            <div className="flex-1"><span className="font-semibold">Nutrition: </span>Last logged {daysSince} day{daysSince > 1 ? "s" : ""} ago. Keep your nutrition data up to date.</div>
+            <Link href="/dashboard/athlete/nutrition-log" className="flex items-center gap-1 text-xs font-semibold text-brand-orange hover:underline shrink-0">Log Now <ArrowRight size={12} /></Link>
+          </div>
+        );
+        return null;
+      })()}
+
       {/* ── Stat cards ──────────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
@@ -238,6 +269,15 @@ export default function AthleteDashboard() {
           <InjuryRiskGauge
             score={data.latestPrediction?.risk_score ?? null}
             level={data.latestPrediction?.risk_level ?? null}
+            confidence={
+              data.latestPrediction?.confidence_low != null
+                ? {
+                    low:    data.latestPrediction.confidence_low,
+                    medium: data.latestPrediction.confidence_medium ?? 0,
+                    high:   data.latestPrediction.confidence_high ?? 0,
+                  }
+                : null
+            }
           />
         </div>
       </div>
@@ -385,6 +425,23 @@ export default function AthleteDashboard() {
           </div>
         )}
       </div>
+
+      {/* ── Voice Assistant ──────────────────────────────── */}
+      <ReportAssistant
+        role="athlete"
+        lang="en-US"
+        voiceGender="female"
+        userName={user?.name ?? ""}
+        context={{
+          riskScore:      data.latestPrediction?.risk_score ?? null,
+          riskLevel:      data.latestPrediction?.risk_level ?? null,
+          avgSleep:       data.recentRecovery.length ? parseFloat((data.recentRecovery.reduce((s, r) => s + r.sleep_hours, 0) / data.recentRecovery.length).toFixed(1)) : null,
+          avgIntensity:   data.recentTraining.length ? parseFloat((data.recentTraining.reduce((s, t) => s + t.intensity, 0) / data.recentTraining.length).toFixed(1)) : null,
+          latestSoreness: data.recentRecovery[0]?.soreness_level ?? null,
+          latestMood:     data.recentRecovery[0]?.mood ?? null,
+          trainingCount:  data.recentTraining.length,
+        }}
+      />
     </div>
   );
 }
