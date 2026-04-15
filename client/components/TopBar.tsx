@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useSidebar } from "@/context/SidebarContext";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Bell, Watch, Plus, ChevronRight, Menu } from "lucide-react";
 
 const BREADCRUMBS: Record<string, string> = {
@@ -102,7 +103,7 @@ export default function TopBar() {
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 shrink-0">
             {user.avatar_url ? (
-              <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+              <Image src={user.avatar_url} alt={user.name} width={32} height={32} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full bg-brand-blue flex items-center justify-center text-white text-xs font-bold">
                 {initials}

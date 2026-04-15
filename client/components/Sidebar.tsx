@@ -35,26 +35,28 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router   = useRouter();
 
-  if (!user) return null;
-
-  const links    = NAV[user.role as keyof typeof NAV] ?? [];
-  const initials = user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
+  const links    = user ? (NAV[user.role as keyof typeof NAV] ?? []) : [];
+  const initials = user ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2) : "";
 
   // Prefetch all nav routes on mount
   useEffect(() => {
-    links.forEach(({ href }) => router.prefetch(href));
-    router.prefetch(`/dashboard/${user.role}/settings`);
-  }, [user.role]);
+    if (user) {
+      links.forEach(({ href }) => router.prefetch(href));
+      router.prefetch(`/dashboard/${user.role}/settings`);
+    }
+  }, [user?.role, links, router]);
 
   // Close drawer on route change
-  useEffect(() => { close(); }, [pathname]);
+  useEffect(() => { close(); }, [pathname, close]);
 
   // Close drawer on Escape key
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
-  }, []);
+  }, [close]);
+
+  if (!user) return null;
 
   const sidebarContent = (
     <aside className="w-60 h-full bg-brand-dark flex flex-col border-r border-white/5 overflow-y-auto">
