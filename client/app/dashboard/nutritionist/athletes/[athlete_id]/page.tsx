@@ -59,7 +59,14 @@ function useSpeech(lang: string, gender: VoiceGender) {
       u.onerror = () => setSpeaking(false);
       speechSynthesis.speak(u);
     };
-    speechSynthesis.getVoices().length ? doSpeak() : (speechSynthesis.onvoiceschanged = () => { doSpeak(); speechSynthesis.onvoiceschanged = null; });
+    if (speechSynthesis.getVoices().length) {
+      doSpeak();
+    } else {
+      speechSynthesis.onvoiceschanged = () => {
+        doSpeak();
+        speechSynthesis.onvoiceschanged = null;
+      };
+    }
   }, [lang, gender]);
   const stop = useCallback(() => { speechSynthesis.cancel(); setSpeaking(false); }, []);
   return { speaking, speak, stop };
@@ -110,14 +117,14 @@ export default function NutritionistAthletePage() {
   const [voiceGender, setVoiceGender] = useState<VoiceGender>("female");
   const { speaking, speak, stop } = useSpeech(lang, voiceGender);
 
-  const fetchData = () => {
+  const fetchData = useCallback(() => {
     api.get(`/nutritionist/athletes/${athlete_id}/dashboard`)
       .then((res) => setData(res.data))
       .catch((err) => setError(err?.response?.data?.error || "Failed to load athlete data."))
       .finally(() => setLoading(false));
-  };
+  }, [athlete_id]);
 
-  useEffect(() => { fetchData(); }, [athlete_id]);
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const handleSavePlan = async (e: React.FormEvent) => {
     e.preventDefault();

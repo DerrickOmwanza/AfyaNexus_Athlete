@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { createClient } from "@supabase/supabase-js";
@@ -67,26 +68,11 @@ export default function SettingsForm() {
         }
       })
       .finally(() => setLoadingProfile(false));
-  }, []);
+  }, [setUserProfile, user?.role]);
 
-  // ── Avatar upload ──────────────────────────────────────────────────────────
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    if (file.size > 10 * 1024 * 1024) {
-      setAvatarErr("Image must be under 10MB.");
-      return;
-    }
-    if (!["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"].includes(file.type)) {
-      setAvatarErr("Only JPG, PNG, WebP or HEIC images are allowed.");
-      return;
-    }
-
-    // Show preview immediately
-    const reader = new FileReader();
-    reader.onload = (ev) => setAvatarPreview(ev.target?.result as string);
-    reader.readAsDataURL(file);
 
     setUploadingAvatar(true);
     setAvatarErr(""); setAvatarMsg("");
@@ -191,7 +177,7 @@ export default function SettingsForm() {
           <div className="relative shrink-0">
             <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-gray-100 shadow-sm">
               {displayAvatar ? (
-                <img src={displayAvatar} alt="Profile" className="w-full h-full object-cover" />
+                <Image src={displayAvatar} alt="Profile" width={80} height={80} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full bg-brand-blue flex items-center justify-center text-white font-heading font-bold text-xl">
                   {initials}

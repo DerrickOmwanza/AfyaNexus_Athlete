@@ -22,7 +22,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   useEffect(() => {
     if (prevPath && prevPath !== pathname) setPageLoading(false);
     setPrevPath(pathname);
-  }, [pathname]);
+  }, [pathname, prevPath]);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -46,7 +46,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         setUserProfile({ ...parsed, avatar_url: fresh.avatar_url ?? null });
       }
     }).catch(() => {});
-  }, []);
+  }, [user, setUserProfile]);
 
   if (loading || !user) {
     return (

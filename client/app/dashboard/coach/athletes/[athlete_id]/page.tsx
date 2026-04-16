@@ -58,7 +58,14 @@ function useSpeech(lang: string, gender: VoiceGender) {
       u.onerror = () => setSpeaking(false);
       speechSynthesis.speak(u);
     };
-    speechSynthesis.getVoices().length ? doSpeak() : (speechSynthesis.onvoiceschanged = () => { doSpeak(); speechSynthesis.onvoiceschanged = null; });
+    if (speechSynthesis.getVoices().length) {
+      doSpeak();
+    } else {
+      speechSynthesis.onvoiceschanged = () => {
+        doSpeak();
+        speechSynthesis.onvoiceschanged = null;
+      };
+    }
   }, [lang, gender]);
   const stop = useCallback(() => { speechSynthesis.cancel(); setSpeaking(false); }, []);
   return { speaking, speak, stop };

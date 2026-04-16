@@ -1,6 +1,30 @@
 "use client";
 import { useState, useCallback, useEffect, useRef } from "react";
 
+interface SpeechRecognitionResultLike {
+  isFinal: boolean;
+  0: { transcript: string };
+}
+
+interface SpeechRecognitionEventLike {
+  results: SpeechRecognitionResultLike[];
+}
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
+
+interface SpeechRecognitionLike {
+  start: () => void;
+  stop: () => void;
+  abort?: () => void;
+  lang: string;
+  interimResults?: boolean;
+  maxAlternatives?: number;
+  onresult?: ((event: SpeechRecognitionEventLike) => void) | null;
+  onend?: (() => void) | null;
+  onerror?: ((event: Event) => void) | null;
+  onstart?: (() => void) | null;
+}
+
 // ── Types ────────────────────────────────────────────────────────────────────
 type Role = "athlete" | "coach" | "nutritionist";
 type VoiceGender = "female" | "male";
@@ -89,9 +113,8 @@ function getResponse(
   ctx: AssistantContext,
   lang: string
 ): { answer: string; action?: { label: string; href: string } } {
-  const q   = question.toLowerCase();
-  const sw  = lang === "sw-KE";
-  const name = ctx.athleteName?.split(" ")[0] ?? (role === "athlete" ? "you" : "this athlete");
+  const q  = question.toLowerCase();
+  const sw = lang === "sw-KE";
 
   // ── ATHLETE ──────────────────────────────────────────────────────────────
   if (role === "athlete") {
@@ -331,7 +354,7 @@ export default function ReportAssistant({
   const [speaking, setSpeaking]   = useState(false);
   const [hasSR, setHasSR]         = useState(false);
   const bottomRef                 = useRef<HTMLDivElement>(null);
-  const recognitionRef            = useRef<SpeechRecognition | null>(null);
+  const recognitionRef            = useRef<SpeechRecognitionLike | null>(null);
   const lastTranscriptRef         = useRef<{ text: string; time: number }>({ text: "", time: 0 });
   const silenceTimerRef            = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -363,9 +386,14 @@ export default function ReportAssistant({
       u.onerror = () => setSpeaking(false);
       speechSynthesis.speak(u);
     };
-    speechSynthesis.getVoices().length
-      ? doSpeak()
-      : (speechSynthesis.onvoiceschanged = () => { doSpeak(); speechSynthesis.onvoiceschanged = null; });
+    if (speechSynthesis.getVoices().length) {
+      doSpeak();
+    } else {
+      speechSynthesis.onvoiceschanged = () => {
+        doSpeak();
+        speechSynthesis.onvoiceschanged = null;
+      };
+    }
   }, [lang, voiceGender]);
 
   const stopSpeaking = useCallback(() => { speechSynthesis.cancel(); setSpeaking(false); }, []);
@@ -383,8 +411,8 @@ export default function ReportAssistant({
   }, [role, context, lang, speak]);
 
   const startListening = useCallback(() => {
-    const SR = (window as Window & { SpeechRecognition?: typeof SpeechRecognition; webkitSpeechRecognition?: typeof SpeechRecognition }).SpeechRecognition
-      || (window as Window & { SpeechRecognition?: typeof SpeechRecognition; webkitSpeechRecognition?: typeof SpeechRecognition }).webkitSpeechRecognition;
+    const SR = (window as Window & { SpeechRecognition?: SpeechRecognitionConstructor; webkitSpeechRecognition?: SpeechRecognitionConstructor }).SpeechRecognition
+      || (window as Window & { SpeechRecognition?: SpeechRecognitionConstructor; webkitSpeechRecognition?: SpeechRecognitionConstructor }).webkitSpeechRecognition;
     if (!SR) return;
     const rec = new SR();
     rec.lang = lang;
@@ -399,7 +427,7 @@ export default function ReportAssistant({
       setListening(false);
       if (silenceTimerRef.current) { clearTimeout(silenceTimerRef.current); silenceTimerRef.current = null; }
     };
-    rec.onresult = (e: SpeechRecognitionEvent) => {
+    rec.onresult = (e: SpeechRecognitionEventLike) => {
       // Cancel any pending answer — user is still speaking
       if (silenceTimerRef.current) { clearTimeout(silenceTimerRef.current); silenceTimerRef.current = null; }
 

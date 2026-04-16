@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "@/lib/api";
 import { MessageSquare, Send, User } from "lucide-react";
 
@@ -50,14 +50,14 @@ export default function CommentsPanel({ athleteId, role }: CommentsPanelProps) {
 
   const endpoint = role === "coach" ? "coach" : "nutritionist";
 
-  const fetchComments = () => {
+  const fetchComments = useCallback(() => {
     api.get(`/${endpoint}/athletes/${athleteId}/comments`)
       .then((res) => setComments(res.data.comments))
       .catch(() => {})
       .finally(() => setLoading(false));
-  };
+  }, [endpoint, athleteId]);
 
-  useEffect(() => { fetchComments(); }, [athleteId]);
+  useEffect(() => { fetchComments(); }, [fetchComments]);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -49,7 +49,7 @@ const STATS = [
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
 const stagger = {
@@ -190,7 +190,7 @@ export default function HomePage() {
           className="text-center mb-14"
           initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
         >
-          <span className="text-brand-green text-xs font-semibold uppercase tracking-widest">Who It's For</span>
+          <span className="text-brand-green text-xs font-semibold uppercase tracking-widest">Who It&apos;s For</span>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mt-2 mb-3">Built for Every Role</h2>
           <p className="text-gray-400 text-sm max-w-xl mx-auto">Three dedicated portals — each tailored to the specific needs of athletes, coaches, and nutritionists.</p>
         </motion.div>

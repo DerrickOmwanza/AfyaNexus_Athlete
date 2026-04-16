@@ -1,9 +1,10 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useSidebar } from "@/context/SidebarContext";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import {
   LayoutDashboard, Activity, Moon, BarChart2,
   Users, Settings, LogOut, Utensils, Apple, Watch, X,
@@ -35,7 +36,10 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router   = useRouter();
 
-  const links    = user ? (NAV[user.role as keyof typeof NAV] ?? []) : [];
+  const links = useMemo(
+    () => (user ? (NAV[user.role as keyof typeof NAV] ?? []) : []),
+    [user]
+  );
   const initials = user ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2) : "";
 
   // Prefetch all nav routes on mount
@@ -44,7 +48,7 @@ export default function Sidebar() {
       links.forEach(({ href }) => router.prefetch(href));
       router.prefetch(`/dashboard/${user.role}/settings`);
     }
-  }, [user?.role, links, router]);
+  }, [user, links, router]);
 
   // Close drawer on route change
   useEffect(() => { close(); }, [pathname, close]);
@@ -83,7 +87,7 @@ export default function Sidebar() {
         <div className="flex items-center gap-3 bg-white/5 rounded-xl px-3 py-2.5">
           <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 shrink-0">
             {user.avatar_url ? (
-              <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+              <Image src={user.avatar_url} alt={user.name} fill className="object-cover" />
             ) : (
               <div className="w-full h-full bg-brand-blue flex items-center justify-center text-white text-xs font-bold">
                 {initials}

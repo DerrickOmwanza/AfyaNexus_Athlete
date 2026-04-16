@@ -60,7 +60,7 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [step, setStep] = useState(0);
+  const [step] = useState(0);
 
   useEffect(() => {
     api.get("/auth/onboarding-options")
