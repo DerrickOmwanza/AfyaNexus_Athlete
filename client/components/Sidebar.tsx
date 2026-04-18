@@ -85,9 +85,15 @@ export default function Sidebar() {
       {/* ── User card ─────────────────────────────────── */}
       <div className="px-4 py-4 border-b border-white/8">
         <div className="flex items-center gap-3 bg-white/5 rounded-xl px-3 py-2.5">
-          <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 shrink-0">
+          <div className="relative !w-8 !h-8 flex-shrink-0 rounded-full overflow-hidden border border-white/20">
             {user.avatar_url ? (
-              <Image src={user.avatar_url} alt={user.name} fill className="object-cover" />
+              <Image 
+                src={user.avatar_url} 
+                alt={user.name} 
+                fill 
+                sizes="32px"
+                className="object-cover w-full h-full"
+              />
             ) : (
               <div className="w-full h-full bg-brand-blue flex items-center justify-center text-white text-xs font-bold">
                 {initials}
