@@ -50,8 +50,9 @@ export default function Sidebar() {
     }
   }, [user, links, router]);
 
-  // Close drawer on route change
-  useEffect(() => { close(); }, [pathname, close]);
+// Close drawer on route change removed - causes mobile flash (toggle + instant close)
+// Keep Escape/backdrop
+
 
   // Close drawer on Escape key
   useEffect(() => {
